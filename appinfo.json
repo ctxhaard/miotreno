@@ -1,0 +1,22 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "c.tomasin@gmail.com",
+    "longName": "Mio treno",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "sdkVersion": "3",
+    "shortName": "Mio treno",
+    "targetPlatforms": [
+        "basalt"
+    ],
+    "uuid": "67073df8-7899-45df-86b5-53fa2b66309a",
+    "versionLabel": "0.1",
+    "watchapp": {
+        "watchface": false
+    }
+}
