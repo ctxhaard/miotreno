@@ -121,7 +121,7 @@ function pushTimelinePin(pin,token){
   var request = new XMLHttpRequest();
   request.onload = function(e){
 //    console.log(request.getAllResponseHeaders());
-    console.log(request.response);
+    console.log(request.responseText);
   };
   request.open('PUT',url,true); // new or updated pin
   request.setRequestHeader('Content-Type','application/json');

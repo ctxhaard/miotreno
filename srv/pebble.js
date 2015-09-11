@@ -4,22 +4,16 @@ var util = require('util');
 
 function Pebble()
 {
-    var self = this;
-    events.EventEmitter.call(self);
 }
 
-util.inherits(Pebble,events.EventEmitter);
+Pebble.prototype.addEventListener = function(eventName,eventHandler){
+	if('ready' == eventName){
+		eventHandler();
+	}
+};
 
-var obj = new Pebble();
-var oldFunc = obj.on;
-obj.on = function(eventName,eventHandler){
-    var self = this;
-    oldFunc.call(self,eventName,eventHandler);
-    //console.log('obj.prototype: ' + obj.prototype);
-    obj.prototype.on.call(self,eventName,eventHandler);
-    if('ready' == eventName){
-        self.emit('ready',self);
-    }
-}
+Pebble.prototype.getTimelineToken = function(doneFunction,errorFunction){
+	doneFunction('SBYM2GEc9fmjY2L25Bsh2tFf3rOwRJ08');
+};
 
-module.exports = obj;
+module.exports = new Pebble();
