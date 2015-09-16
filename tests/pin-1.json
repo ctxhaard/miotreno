@@ -1,0 +1,26 @@
+{
+  "id": "QUARTO D`ALTINO-2015-09-16T16:17:00.000Z",
+  "time": "2015-09-16T16:17:00.000Z",
+  "createNotification": {
+    "layout": {
+      "type": "genericNotification",
+      "title": "QUARTO D`ALTINO",
+      "tinyIcon": "system://images/NOTIFICATION_FLAG",
+      "body": "non ancora partito"
+    }
+  },
+  "updateNotification": {
+    "time": "2015-09-16T16:17:00.000Z",
+    "layout": {
+      "type": "genericNotification",
+      "tinyIcon": "system://images/NOTIFICATION_FLAG",
+      "title": "QUARTO D`ALTINO",
+      "body": "non ancora partito"
+    }
+  },
+  "layout": {
+    "type": "genericPin",
+    "title": "QUARTO D`ALTINO",
+    "subtitle": "non ancora partito"
+  }
+}
