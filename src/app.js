@@ -5,8 +5,8 @@ Date.prototype.myToString = function(){
   var pad = function (str, max) {
     str = str.toString();
     return str.length < max ? pad("0" + str, max) : str;
-  };
-  return this.getHours() + ":" + pad(this.getMinutes(),2);
+};
+return this.getHours() + ":" + pad(this.getMinutes(),2);
 };
 
 var _TRAINS = [{
@@ -30,7 +30,7 @@ function pinNextTrain(trains){
   var train = trains.pop();
   if(train){
     getTrainStatus(train.codPartenza,train.codTreno,train.codStazione);  
-  }
+}
 }
 
 function getTrainStatus(codPartenza,numeroTreno,codStazione){
@@ -40,32 +40,32 @@ function getTrainStatus(codPartenza,numeroTreno,codStazione){
   var url = URL_VIAGGIATRENO + '/'+ codPartenza +'/' + numeroTreno;
   request.open('GET',url,true);
   request.onload = function(e){
-  console.log('...viaggiatreno data acquired');
-  var trainStatus = JSON.parse(this.responseText);
-  var fermata;
-  for(var idx = 0; idx < trainStatus.fermate.length; ++idx){
-    fermata = trainStatus.fermate[idx];
-    if(fermata.id == codStazione){
-      break;
-    }
+    console.log('...viaggiatreno data acquired');
+    var trainStatus = JSON.parse(this.responseText);
+    var fermata;
+    for(var idx = 0; idx < trainStatus.fermate.length; ++idx){
+        fermata = trainStatus.fermate[idx];
+        if(fermata.id == codStazione){
+          break;
+      }
   }
-    if(!fermata){
+  if(!fermata){
       console.log('fermata non disponibile');
       pinNextTrain(_trains);
-    }
-    else{
+  }
+  else{
     var partenzaPrevista = new Date(fermata.partenza_teorica);
     var title = fermata.stazione;
     var subtitle = "non ancora partito";
-  
+
     console.log('partenza reale: ' + fermata.partenzaReale);
     if(fermata.partenzaReale){
       title = title + " (" + fermata.ritardoPartenza + "' rit.)";
 
       var partenzaReale = new Date(fermata.partenzaReale);
       subtitle = " previsto: " + partenzaReale.myToString();      
-    }
-    var pin = {
+  }
+  var pin = {
       "id": fermata.stazione + "-" + partenzaPrevista.toISOString(),
       "time": partenzaPrevista.toISOString(),
       "createNotification": {
@@ -74,55 +74,56 @@ function getTrainStatus(codPartenza,numeroTreno,codStazione){
           "title": title,
           "tinyIcon": "system://images/NOTIFICATION_FLAG",
           "body": subtitle
-        }
-      },
-      "updateNotification": {
-        "time": partenzaPrevista.toISOString(),
-        "layout": {
-          "type": "genericNotification",
-          "tinyIcon": "system://images/NOTIFICATION_FLAG",
-          "title": title,
-          "body": subtitle
-        }
-      },
-      "layout": {
-        "type": "genericPin",
-        "title": title,
-        "subtitle": subtitle
       }
-    };
-    
-    console.log(JSON.stringify(pin));
-    if(!_timelineToken){
-      Pebble.getTimelineToken(
+  },
+  "updateNotification": {
+    "time": new Date().toISOString(),
+    "layout": {
+      "type": "genericNotification",
+      "tinyIcon": "system://images/NOTIFICATION_FLAG",
+      "title": title,
+      "body": subtitle
+  }
+},
+"layout": {
+    "type": "genericPin",
+    "title": title,
+    "subtitle": subtitle
+}
+};
+
+console.log(JSON.stringify(pin));
+if(!_timelineToken){
+  Pebble.getTimelineToken(
       function(token){
         _timelineToken = token;
         console.log('my timeline token is: ' + token);
         pushTimelinePin(pin,_timelineToken);
         pinNextTrain(_trains);
-      },function(error){
+    },function(error){
         console.log('error: ' + error + 'getting timeline token');
-      });    
-    }
-    else{
-      pushTimelinePin(pin,_timelineToken);
-      pinNextTrain(_trains);
-    }
-    
-    }
-  };
-  console.log('getting viaggiatreno data from ' + url + ' ...');
-  request.send();
+    });    
+}
+else{
+  pushTimelinePin(pin,_timelineToken);
+  pinNextTrain(_trains);
+}
+
+}
+};
+console.log('getting viaggiatreno data from ' + url + ' ...');
+request.send();
 }
 
 function pushTimelinePin(pin,token){
-  var url = 'https://timeline-api.getpebble.com/v1/user/pins/' + pin.id;
-  
-  var request = new XMLHttpRequest();
-  request.onload = function(e){
+    return; // TODO: rimuovere
+    var url = 'https://timeline-api.getpebble.com/v1/user/pins/' + pin.id;
+
+    var request = new XMLHttpRequest();
+    request.onload = function(e){
 //    console.log(request.getAllResponseHeaders());
-    console.log(request.responseText);
-  };
+console.log(request.responseText);
+};
   request.open('PUT',url,true); // new or updated pin
   request.setRequestHeader('Content-Type','application/json');
   request.setRequestHeader('X-User-Token',token);

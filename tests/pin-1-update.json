@@ -6,21 +6,21 @@
       "type": "genericNotification",
       "title": "QUARTO D`ALTINO",
       "tinyIcon": "system://images/NOTIFICATION_FLAG",
-      "body": "non ancora partito"
+      "body": "created"
     }
   },
   "updateNotification": {
-    "time": "2015-09-16T16:17:00.000Z",
+    "time": "2015-09-16T11:05:20.953Z",
     "layout": {
       "type": "genericNotification",
       "tinyIcon": "system://images/NOTIFICATION_FLAG",
       "title": "QUARTO D`ALTINO",
-      "body": "aggiornato il pin!"
+      "body": "updated"
     }
   },
   "layout": {
     "type": "genericPin",
     "title": "QUARTO D`ALTINO",
-    "subtitle": "treno partito in orario"
+    "subtitle": "non ancora partito"
   }
 }
