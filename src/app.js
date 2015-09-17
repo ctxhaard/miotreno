@@ -5,8 +5,8 @@ Date.prototype.myToString = function(){
   var pad = function (str, max) {
     str = str.toString();
     return str.length < max ? pad("0" + str, max) : str;
-};
-return this.getHours() + ":" + pad(this.getMinutes(),2);
+  };
+  return this.getHours() + ":" + pad(this.getMinutes(),2);
 };
 
 var _TRAINS = [{
@@ -30,7 +30,7 @@ function pinNextTrain(trains){
   var train = trains.pop();
   if(train){
     getTrainStatus(train.codPartenza,train.codTreno,train.codStazione);  
-}
+  }
 }
 
 function getTrainStatus(codPartenza,numeroTreno,codStazione){
@@ -45,79 +45,80 @@ function getTrainStatus(codPartenza,numeroTreno,codStazione){
     console.log(this.responseText);
     var fermata;
     for(var idx = 0; idx < trainStatus.fermate.length; ++idx){
-        fermata = trainStatus.fermate[idx];
-        if(fermata.id == codStazione){
-          break;
+      fermata = trainStatus.fermate[idx];
+      if(fermata.id == codStazione){
+        break;
       }
-  }
-  if(!fermata){
+    }
+    if(!fermata){
       console.log('fermata non disponibile');
       pinNextTrain(_trains);
-  }
-  else{
-    var partenzaPrevista = new Date(fermata.partenza_teorica);
-    var title = fermata.stazione;
-    var subtitle = "non ancora partito";
+    } else {
+      var partenzaPrevista = new Date(fermata.partenza_teorica);
+      var title = fermata.stazione;
+      var subtitle = "non ancora partito";
 
-    console.log('partenza reale: ' + fermata.partenzaReale);
-    if(fermata.partenzaReale){
-      title = title + " (" + fermata.ritardoPartenza + "' rit.)";
+      console.log('partenza reale: ' + fermata.partenzaReale);
 
-      var partenzaReale = new Date(fermata.partenzaReale);
-      subtitle = " previsto: " + partenzaReale.myToString();      
-  }
-  var pin = {
-      "id": fermata.stazione + "-" + partenzaPrevista.toISOString(),
-      "time": partenzaPrevista.toISOString(),
-      "createNotification": {
-        "layout": {
-          "type": "genericNotification",
-          "title": title,
-          "tinyIcon": "system://images/NOTIFICATION_FLAG",
-          "body": subtitle
+      var ritardoText = trainStatus.compRitardo[0];
+      if(ritardoText){
+        title = title + " (" + ritardoText + ")";
+
+        var partenzaReale = new Date(fermata.partenzaReale);
+        subtitle = " previsto: " + partenzaReale.myToString();      
       }
-  },
-  "updateNotification": {
-    "time": new Date().toISOString(),
-    "layout": {
-      "type": "genericNotification",
-      "tinyIcon": "system://images/NOTIFICATION_FLAG",
-      "title": title,
-      "body": subtitle
-  }
-},
-"layout": {
-    "type": "genericPin",
-    "title": title,
-    "subtitle": subtitle
-}
-};
+      var pin = {
+        "id": fermata.stazione + "-" + partenzaPrevista.toISOString(),
+        "time": partenzaPrevista.toISOString(),
+        "createNotification": {
+          "layout": {
+            "type": "genericNotification",
+            "title": title,
+            "tinyIcon": "system://images/NOTIFICATION_FLAG",
+            "body": subtitle
+          }
+        },
+        "updateNotification": {
+          "time": new Date().toISOString(),
+          "layout": {
+            "type": "genericNotification",
+            "tinyIcon": "system://images/NOTIFICATION_FLAG",
+            "title": title,
+            "body": subtitle
+          }
+        },
+        "layout": {
+          "type": "genericPin",
+          "title": title,
+          "subtitle": subtitle
+        }
+      };
 
-console.log(JSON.stringify(pin));
-if(!_timelineToken){
-  Pebble.getTimelineToken(
-      function(token){
-        _timelineToken = token;
-        console.log('my timeline token is: ' + token);
+      console.log(JSON.stringify(pin));
+      if(!_timelineToken){
+        Pebble.getTimelineToken(
+          function(token){
+            _timelineToken = token;
+            console.log('my timeline token is: ' + token);
+            pushTimelinePin(pin,_timelineToken);
+            pinNextTrain(_trains);
+          },function(error){
+            console.log('error: ' + error + 'getting timeline token');
+          });    
+      }
+      else{
         pushTimelinePin(pin,_timelineToken);
         pinNextTrain(_trains);
-    },function(error){
-        console.log('error: ' + error + 'getting timeline token');
-    });    
-}
-else{
-  pushTimelinePin(pin,_timelineToken);
-  pinNextTrain(_trains);
-}
+      }
 
-}
-};
-console.log('getting viaggiatreno data from ' + url + ' ...');
-request.send();
+    }
+  };
+  console.log('getting viaggiatreno data from ' + url + ' ...');
+  request.send();
 }
 
 function pushTimelinePin(pin,token){
-    return; // TODO: rimuovere
+    // return; // TODO: rimuovere
     var url = 'https://timeline-api.getpebble.com/v1/user/pins/' + pin.id;
 
     var request = new XMLHttpRequest();
