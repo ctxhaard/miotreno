@@ -42,6 +42,7 @@ function getTrainStatus(codPartenza,numeroTreno,codStazione){
   request.onload = function(e){
     console.log('...viaggiatreno data acquired');
     var trainStatus = JSON.parse(this.responseText);
+    console.log(this.responseText);
     var fermata;
     for(var idx = 0; idx < trainStatus.fermate.length; ++idx){
         fermata = trainStatus.fermate[idx];
