@@ -4,4 +4,4 @@ var Pebble = require('./pebble');
 var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 // 'include' of app.js to share codebase with Pebble App
 var fs = require('fs');
-eval(fs.readFileSync('../src/app.js') + '');
+eval(fs.readFileSync('./app.js') + '');

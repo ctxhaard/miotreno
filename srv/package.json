@@ -17,7 +17,8 @@
     "stato"
   ],
   "dependencies": {
-    "xmlhttprequest": "~1.7.0"
+    "xmlhttprequest": "~1.7.0",
+    "express": "4.13.3"
   },
   "preferGlobal": false,
   "private": true,  
