@@ -1,5 +1,7 @@
 
 var _timelineToken;
+const VERBOSE_LOG = 0; // truthy: a verbose log is printed on the console
+const PUSH_PIN = 0; // truthy: the PIN is actually pushed on the Pebble Timeline
 
 Date.prototype.myToString = function(){
   var pad = function (str, max) {
@@ -42,7 +44,7 @@ function getTrainStatus(codPartenza,numeroTreno,codStazione){
   request.onload = function(e){
     console.log('...viaggiatreno data acquired');
     var trainStatus = JSON.parse(this.responseText);
-    console.log(this.responseText);
+    VERBOSE_LOG && console.log(this.responseText);
     var fermata;
     for(var idx = 0; idx < trainStatus.fermate.length; ++idx){
       fermata = trainStatus.fermate[idx];
@@ -57,8 +59,6 @@ function getTrainStatus(codPartenza,numeroTreno,codStazione){
       var partenzaPrevista = new Date(fermata.partenza_teorica);
       var title = fermata.stazione;
       var subtitle = "non ancora partito";
-
-      console.log('partenza reale: ' + fermata.partenzaReale);
 
       var ritardoText = trainStatus.compRitardo[0];
       if(ritardoText){
@@ -94,20 +94,20 @@ function getTrainStatus(codPartenza,numeroTreno,codStazione){
         }
       };
 
-      console.log(JSON.stringify(pin));
+      VERBOSE_LOG && console.log(JSON.stringify(pin));
       if(!_timelineToken){
         Pebble.getTimelineToken(
           function(token){
             _timelineToken = token;
-            console.log('my timeline token is: ' + token);
-            pushTimelinePin(pin,_timelineToken);
+            VERBOSE_LOG && console.log('my timeline token is: ' + token);
+            PUSH_PIN && pushTimelinePin(pin,_timelineToken);
             pinNextTrain(_trains);
           },function(error){
             console.log('error: ' + error + 'getting timeline token');
           });    
       }
       else{
-        pushTimelinePin(pin,_timelineToken);
+        PUSH_PIN && pushTimelinePin(pin,_timelineToken);
         pinNextTrain(_trains);
       }
 
@@ -117,14 +117,12 @@ function getTrainStatus(codPartenza,numeroTreno,codStazione){
   request.send();
 }
 
-function pushTimelinePin(pin,token){
-    // return; // TODO: rimuovere
+function pushTimelinePin(pin,token){ 
     var url = 'https://timeline-api.getpebble.com/v1/user/pins/' + pin.id;
 
     var request = new XMLHttpRequest();
     request.onload = function(e){
-//    console.log(request.getAllResponseHeaders());
-console.log(request.responseText);
+    VERBOSE_LOG && console.log(request.responseText);
 };
   request.open('PUT',url,true); // new or updated pin
   request.setRequestHeader('Content-Type','application/json');
