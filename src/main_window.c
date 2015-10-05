@@ -1,6 +1,7 @@
 #include <pebble.h>
 #include "main_window.h"
 #include "app_data.h"
+#include "schedule.h"
 
 // BEGIN AUTO-GENERATED UI CODE; DO NOT MODIFY
 static Window *s_window;
@@ -22,7 +23,7 @@ static void initialise_ui(void) {
   #ifndef PBL_SDK_3
     window_set_fullscreen(s_window, true);
   #endif
-  
+
   s_res_gothic_18_bold = fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD);
   // s_expected_departure
   s_expected_departure = text_layer_create(GRect(8, 56, 118, 20));
@@ -31,21 +32,21 @@ static void initialise_ui(void) {
   text_layer_set_text(s_expected_departure, "17:39");
   text_layer_set_font(s_expected_departure, s_res_gothic_18_bold);
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_expected_departure);
-  
+
   // s_last_station
   s_last_station = text_layer_create(GRect(8, 126, 108, 40));
   text_layer_set_background_color(s_last_station, GColorClear);
   text_layer_set_text_color(s_last_station, GColorWhite);
   text_layer_set_text(s_last_station, "PORTOGRUARO / CAORLE");
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_last_station);
-  
+
   // s_last_station_label
   s_last_station_label = text_layer_create(GRect(8, 106, 78, 20));
   text_layer_set_background_color(s_last_station_label, GColorClear);
   text_layer_set_text_color(s_last_station_label, GColorWhite);
   text_layer_set_text(s_last_station_label, "last seen at:");
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_last_station_label);
-  
+
   // s_status
   s_status = text_layer_create(GRect(8, 86, 78, 20));
   text_layer_set_background_color(s_status, GColorClear);
@@ -53,15 +54,15 @@ static void initialise_ui(void) {
   text_layer_set_text(s_status, "IN ORARIO");
   text_layer_set_font(s_status, s_res_gothic_18_bold);
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_status);
-  
+
   // s_icon_layer
   s_icon_layer = layer_create(GRect(86, 86, 40, 40));
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_icon_layer);
-  
+
   // s_ruler
   s_ruler = layer_create(GRect(8, 76, 130, 10));
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_ruler);
-  
+
   // s_destination
   s_destination = text_layer_create(GRect(30, 36, 98, 20));
   text_layer_set_background_color(s_destination, GColorClear);
@@ -69,7 +70,7 @@ static void initialise_ui(void) {
   text_layer_set_text(s_destination, "VENEZIA S.L.");
   text_layer_set_font(s_destination, s_res_gothic_18_bold);
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_destination);
-  
+
   // s_destination_label
   s_destination_label = text_layer_create(GRect(8, 36, 20, 20));
   text_layer_set_background_color(s_destination_label, GColorClear);
@@ -77,14 +78,14 @@ static void initialise_ui(void) {
   text_layer_set_text(s_destination_label, "to:");
   text_layer_set_font(s_destination_label, s_res_gothic_18_bold);
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_destination_label);
-  
+
   // s_station
   s_station = text_layer_create(GRect(8, 16, 118, 20));
   text_layer_set_background_color(s_station, GColorClear);
   text_layer_set_text_color(s_station, GColorWhite);
   text_layer_set_text(s_station, "MEOLO");
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_station);
-  
+
   // s_actionbarlayer
   s_actionbarlayer = action_bar_layer_create();
   action_bar_layer_add_to_window(s_actionbarlayer, s_window);
@@ -109,6 +110,11 @@ static void destroy_ui(void) {
 
 static void main_window_load_schedule(Window *window,Schedule *schedule) {
   // TODO: implementare
+  text_layer_set_text(s_station,schedule_get_station(schedule));
+  text_layer_set_text(s_destination,schedule_get_destination(schedule));
+  text_layer_set_text(s_status.schedule_get_status(schedule));
+  text_layer_set_text(s_expected_departure,schedule_get_expected_departure(schedule));
+  text_layer_set_text(s_last_station,schedule_get_last_station(schedule));
 }
 
 static void handle_window_load(Window *window) {
