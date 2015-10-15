@@ -1,18 +1,12 @@
 #include <pebble.h>
-
-Window *my_window;
-TextLayer *text_layer;
+#include "main_window.h"
 
 void handle_init(void) {
-  my_window = window_create();
-
-  text_layer = text_layer_create(GRect(0, 0, 144, 20));
-  window_stack_push(my_window, true);
+  show_main_window();
 }
 
 void handle_deinit(void) {
-  text_layer_destroy(text_layer);
-  window_destroy(my_window);
+  hide_main_window();
 }
 
 int main(void) {
