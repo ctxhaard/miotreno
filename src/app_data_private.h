@@ -9,4 +9,8 @@ struct AppData{
     int schedule_index;
 };
 
+AppData *app_data_create();
+
+void app_data_release(AppData *app_data);
+
 struct AppData *app_data_init(struct AppData *);
