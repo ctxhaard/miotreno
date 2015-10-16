@@ -1,7 +1,6 @@
 #include <pebble.h>
 #include "main_window.h"
 #include "app_data.h"
-#include "schedule.h"
 
 // BEGIN AUTO-GENERATED UI CODE; DO NOT MODIFY
 static Window *s_window;
@@ -112,7 +111,7 @@ static void main_window_load_schedule(Window *window,Schedule *schedule) {
   // TODO: implementare
   text_layer_set_text(s_station,schedule_get_station(schedule));
   text_layer_set_text(s_destination,schedule_get_destination(schedule));
-  text_layer_set_text(s_status.schedule_get_status(schedule));
+  text_layer_set_text(s_status,schedule_get_status(schedule));
   text_layer_set_text(s_expected_departure,schedule_get_expected_departure(schedule));
   text_layer_set_text(s_last_station,schedule_get_last_station(schedule));
 }

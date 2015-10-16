@@ -2,6 +2,7 @@
 
 #include <pebble.h>
 #include "app_data.h"
+#include "schedule.h"
 
 struct AppData{
     Schedule *schedules;

@@ -1,5 +1,5 @@
 #include <pebble.h>
-#include "app_data.h"
+//#include "app_data.h"
 #include "app_data_private.h"
 //#include <stddef.h> // NULL
 //#include <stdlib.h> // malloc
@@ -43,6 +43,6 @@ Schedule *app_get_current_schedule(AppData *app_data) {
 AppData *app_data_init(AppData *app_data) {
     
     app_data->schedule_index = SCHEDULE_INDEX_UNDEF;
-    app_data->schedules = calloc(SCHEDULE_NUM_MAX,sizeof(Schedule));
+//    app_data->schedules = calloc(SCHEDULE_NUM_MAX,sizeof(Schedule));
     return app_data;
 }
