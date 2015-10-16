@@ -108,22 +108,12 @@ static void destroy_ui(void) {
 // END AUTO-GENERATED UI CODE
 
 static void main_window_load_schedule(Window *window,Schedule *schedule) {
-  if(schedule) {
-
-    text_layer_set_text(s_station,schedule_get_station(schedule));
-    text_layer_set_text(s_destination,schedule_get_destination(schedule));
-    text_layer_set_text(s_status,schedule_get_status(schedule));
-    text_layer_set_text(s_expected_departure,schedule_get_expected_departure(schedule));
-    text_layer_set_text(s_last_station,schedule_get_last_station(schedule));
-  }
-  else {
-
-    text_layer_set_text(s_station,"station");
-    text_layer_set_text(s_destination,"destination");
-    text_layer_set_text(s_status,"status");
-    text_layer_set_text(s_expected_departure,"--:--");
-    text_layer_set_text(s_last_station,"last seen at");
-  }
+  // TODO: implementare
+  text_layer_set_text(s_station,schedule_get_station(schedule));
+  text_layer_set_text(s_destination,schedule_get_destination(schedule));
+  text_layer_set_text(s_status,schedule_get_status(schedule));
+  text_layer_set_text(s_expected_departure,schedule_get_expected_departure(schedule));
+  text_layer_set_text(s_last_station,schedule_get_last_station(schedule));
 }
 
 static void handle_window_load(Window *window) {

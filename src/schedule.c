@@ -1,18 +1,5 @@
 #include "schedule_private.h"
 
-Schedule *schedule_create() {
-    // TODO: implementare
-
-}
-
-void schedule_release(Schedule *) {
-    // TODO: implementare
-}
-
-Schedule *schedule_init(Schedule *) {
-    // TODO: implementare
-}
-
 char *schedule_get_station(Schedule *s) {
     return s->station;
 }
