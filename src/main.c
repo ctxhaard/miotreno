@@ -5,7 +5,7 @@
 void handle_init(void) {
   AppData *a = app_get_shared();
   app_load_test_schedules(a);
-
+  
   show_main_window();
 }
 
@@ -18,4 +18,3 @@ int main(void) {
   app_event_loop();
   handle_deinit();
 }
-

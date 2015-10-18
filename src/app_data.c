@@ -63,7 +63,7 @@ Schedule *app_get_current_schedule(AppData *app_data) {
 }
 
 void app_load_test_schedules(AppData *this) {
-
+  
   this->schedules[0] = schedule_init(schedule_create(),"Meolo","Venezia S.L.","17:39");
   this->schedules[0] = schedule_init(schedule_create(),"Quarto D'Altino","Venezia S.L.","17:55");
   this->schedules[0] = schedule_init(schedule_create(),"Quarto D'Altino","Venezia S.L.","18:17");
