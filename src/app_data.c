@@ -1,10 +1,6 @@
 #include <pebble.h>
-//#include "app_data.h"
 #include "app_data_private.h"
-//#include <stddef.h> // NULL
-//#include <stdlib.h> // malloc
 
-#define SCHEDULE_NUM_MAX (10)
 #define SCHEDULE_INDEX_UNDEF (-1)
 
 static AppData *g_app_data = NULL;
@@ -12,16 +8,14 @@ static AppData *g_app_data = NULL;
 AppData *app_data_create() {
 
     AppData *result = malloc(sizeof(AppData));
-    result->schedules = calloc(SCHEDULE_NUM_MAX,sizeof(Schedule *));
     return result;
 }
 
 void app_data_release(AppData *app_data) {
 
     for(int i = 0 ; i < SCHEDULE_NUM_MAX; ++i) {
-        schedule_release(app_data->schedules + i);
+        schedule_release(app_data->schedules[i]);
     }
-    free(app_data->schedules);
     free(app_data);
 }
 
@@ -29,11 +23,10 @@ AppData *app_data_init(AppData *app_data) {
 
     app_data->schedule_index = SCHEDULE_INDEX_UNDEF;
     for(int i = 0 ; i < SCHEDULE_NUM_MAX; ++i) {
-        Schedule *s = app_data->schedules + i;
-        s = schedule_create();
-        schedule_init(s);
+      Schedule *s = schedule_create();
+      schedule_init(s);
+      app_data->schedules[i] = s;
     }
-//    app_data->schedules = calloc(SCHEDULE_NUM_MAX,sizeof(Schedule));
     return app_data;
 }
 
@@ -67,4 +60,11 @@ Schedule *app_get_current_schedule(AppData *app_data) {
         result = app_data->schedules[app_data->schedule_index];
 
     return result;
+}
+
+void app_load_test_schedules(AppData *this) {
+
+  this->schedules[0] = schedule_init(schedule_create(),"Meolo","Venezia S.L.","17:39");
+  this->schedules[0] = schedule_init(schedule_create(),"Quarto D'Altino","Venezia S.L.","17:55");
+  this->schedules[0] = schedule_init(schedule_create(),"Quarto D'Altino","Venezia S.L.","18:17");
 }
