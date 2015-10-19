@@ -16,16 +16,17 @@ void schedule_release(Schedule *s) {
     }
 }
 
-void set_str(char **pDest,char *status) {
-
+void set_str(char **pDest,char *src) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG,"copying string: %s ...",src);
   // NOTE: se il primo parametro di realloc e'NULL
   // corrisponse ad una malloc
-  const size_t len = strlen(status) + 1;
+  const size_t len = strlen(src) + 1;
   *pDest = realloc(*pDest,len);
 
   char *dest = *pDest;
-  strcpy(dest,status);
+  strcpy(dest,src);
   dest[len - 1] = 0x00;
+  APP_LOG(APP_LOG_LEVEL_DEBUG,"... dest is: %s",dest);
  }
 
 Schedule *schedule_init(Schedule *s,char *station,char *dest,char *exp_dep) {

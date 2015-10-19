@@ -127,10 +127,6 @@ static void main_window_load_schedule(Window *window,Schedule *schedule) {
 }
 
 static void handle_window_load(Window *window) {
-  AppData *app_data = app_get_shared();
-  app_set_index(app_data,0);
-  Schedule *schedule = app_get_current_schedule(app_data);
-  main_window_load_schedule(s_window,schedule);
 }
 
 static void handle_window_unload(Window* window) {
@@ -139,6 +135,12 @@ static void handle_window_unload(Window* window) {
 
 void show_main_window(void) {
   initialise_ui();
+  
+  AppData *app_data = app_get_shared();
+  app_set_index(app_data,0);
+  Schedule *schedule = app_get_current_schedule(app_data);
+  main_window_load_schedule(s_window,schedule);
+
   window_set_window_handlers(s_window, (WindowHandlers) {
     .load = handle_window_load,
     .unload = handle_window_unload,
