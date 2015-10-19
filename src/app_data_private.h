@@ -4,10 +4,8 @@
 #include "app_data.h"
 #include "schedule.h"
 
-#define SCHEDULE_NUM_MAX (10)
-
 struct AppData{
-    Schedule *schedules[SCHEDULE_NUM_MAX];
+    Schedule *schedules;
     int schedule_index;
 };
 
