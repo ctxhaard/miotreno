@@ -26,14 +26,15 @@ void set_str(char **pDest,char *src) {
   char *dest = *pDest;
   strcpy(dest,src);
   dest[len - 1] = 0x00;
-  APP_LOG(APP_LOG_LEVEL_DEBUG,"... dest is: %s",dest);
+  APP_LOG(APP_LOG_LEVEL_DEBUG,"... dest is: %s",*pDest);
  }
 
 Schedule *schedule_init(Schedule *s,char *station,char *dest,char *exp_dep) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG,"%s",__PRETTY_FUNCTION__);
   memset(s,0,sizeof(Schedule));
-  set_str(&s->station,station);
-  set_str(&s->destination,dest);
-  set_str(&s->expected_departure,exp_dep);
+  if(station) set_str(&(s->station),station);
+  if(dest) set_str(&(s->destination),dest);
+  if(exp_dep) set_str(&(s->expected_departure),exp_dep);
   return s;
 }
 
@@ -67,3 +68,13 @@ Schedule *schedule_set_last_station(Schedule *this,char *last_station) {
   set_str(&this->last_station,last_station);
   return this;
 }
+
+void schedule_dump(Schedule *s) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG,"Schedule (0x%0x):\n\tstation: %s\n\tdestination: %s\n\tdestinationexp dep:%s",
+    (int)s,
+    s->station,
+    s->destination,
+    s->expected_departure);
+}
+
+

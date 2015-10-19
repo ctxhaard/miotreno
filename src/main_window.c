@@ -137,8 +137,13 @@ void show_main_window(void) {
   initialise_ui();
   
   AppData *app_data = app_get_shared();
+  if(!app_data) APP_LOG(APP_LOG_LEVEL_ERROR,"NULL app data");
+
   app_set_index(app_data,0);
   Schedule *schedule = app_get_current_schedule(app_data);
+  if(!schedule) APP_LOG(APP_LOG_LEVEL_ERROR,"NULL current schedule");
+
+  schedule_dump(schedule);
   main_window_load_schedule(s_window,schedule);
 
   window_set_window_handlers(s_window, (WindowHandlers) {

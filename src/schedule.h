@@ -20,3 +20,5 @@ Schedule *schedule_set_status(Schedule *,char *);
 
 char *schedule_get_last_station(Schedule *);
 Schedule *schedule_set_last_station(Schedule *,char *);
+
+void schedule_dump(Schedule *);
