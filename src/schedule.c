@@ -21,7 +21,7 @@ void set_str(char **pDest,char *status) {
   // NOTE: se il primo parametro di realloc e'NULL
   // corrisponse ad una malloc
   const size_t len = strlen(status) + 1;
-  *pDest = realloc(this->status,len);
+  *pDest = realloc(*pDest,len);
 
   char *dest = *pDest;
   strcpy(dest,status);

@@ -2,6 +2,7 @@
 #include "app_data_private.h"
 
 #define SCHEDULE_INDEX_UNDEF (-1)
+#define SCHEDULE_NUM_MAX (10)
 
 static AppData *g_app_data = NULL;
 
@@ -24,7 +25,7 @@ AppData *app_data_init(AppData *app_data) {
     app_data->schedule_index = SCHEDULE_INDEX_UNDEF;
     for(int i = 0 ; i < SCHEDULE_NUM_MAX; ++i) {
       Schedule *s = schedule_create();
-      schedule_init(s);
+      schedule_init(s,NULL,NULL,NULL);
       app_data->schedules[i] = s;
     }
     return app_data;
@@ -65,6 +66,6 @@ Schedule *app_get_current_schedule(AppData *app_data) {
 void app_load_test_schedules(AppData *this) {
 
   this->schedules[0] = schedule_init(schedule_create(),"Meolo","Venezia S.L.","17:39");
-  this->schedules[0] = schedule_init(schedule_create(),"Quarto D'Altino","Venezia S.L.","17:55");
-  this->schedules[0] = schedule_init(schedule_create(),"Quarto D'Altino","Venezia S.L.","18:17");
+  this->schedules[1] = schedule_init(schedule_create(),"Quarto D'Altino","Venezia S.L.","17:55");
+  this->schedules[2] = schedule_init(schedule_create(),"Quarto D'Altino","Venezia S.L.","18:17");
 }

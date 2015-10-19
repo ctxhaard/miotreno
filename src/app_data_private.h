@@ -5,7 +5,7 @@
 #include "schedule.h"
 
 struct AppData{
-    Schedule *schedules;
+    Schedule **schedules;
     int schedule_index;
 };
 
