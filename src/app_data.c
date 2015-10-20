@@ -43,13 +43,45 @@ void app_shared_release() {
     g_app_data = NULL;
 }
 
-void app_set_index(AppData *app_data, int index) {
-    if(index < SCHEDULE_NUM_MAX) {
-      app_data->schedule_index = index;
-    }
-    else {
-      APP_LOG(APP_LOG_LEVEL_ERROR,"AppData: setting invalid schedule index");
-    }
+// void app_set_index(AppData *app_data, int index) {
+//     if(index < SCHEDULE_NUM_MAX) {
+//       app_data->schedule_index = index;
+//     }
+//     else {
+//       APP_LOG(APP_LOG_LEVEL_ERROR,"AppData: setting invalid schedule index");
+//     }
+// }
+
+Schedule *app_select_first_schedule(AppData *this) {
+
+  int new_index = 0;
+  if(new_index >= SCHEDULE_NUM_MAX) {
+    return NULL;
+  }  
+  Schedule *result = this->schedules[new_index];
+  if(result) this->schedule_index = new_index;
+  return result;
+}
+
+Schedule *app_select_next_schedule(AppData *this){
+
+  int new_index = this->schedule_index + 1;
+  if(new_index >= SCHEDULE_NUM_MAX) {
+    return NULL;
+  }  
+  Schedule *result = this->schedules[new_index];
+  if(result) this->schedule_index = new_index;
+  return result;
+}
+
+Schedule *app_select_prev_schedule(AppData *this){
+
+  int new_index = this->schedule_index - 1;
+  if(new_index < 0) {
+    return NULL;
+  }  
+  this->schedule_index = new_index;
+  return this->schedules[new_index];
 }
 
 Schedule *app_get_current_schedule(AppData *this) {
@@ -57,12 +89,7 @@ Schedule *app_get_current_schedule(AppData *this) {
     Schedule *result = NULL;
     if(this->schedule_index != SCHEDULE_INDEX_UNDEF) {
       result = this->schedules[this->schedule_index];
-      APP_LOG(APP_LOG_LEVEL_DEBUG,"Schedule!: 0x%x",(int)result);
     }
-    else {
-      APP_LOG(APP_LOG_LEVEL_ERROR,"AppData: accessing invalid schedule index");
-    }
-
     return result;
 }
 

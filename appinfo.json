@@ -1,5 +1,9 @@
 {
-    "appKeys": {},
+    "appKeys": {
+        "KEY_COD_PARTENZA": 1,
+        "KEY_COD_STAZIONE": 3,
+        "KEY_COD_TRENO": 2
+    },
     "capabilities": [
         ""
     ],

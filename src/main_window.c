@@ -14,11 +14,10 @@ static Layer *s_ruler;
 static TextLayer *s_destination;
 static TextLayer *s_destination_label;
 static TextLayer *s_station;
-static ActionBarLayer *s_actionbarlayer;
 
 static void initialise_ui(void) {
   s_window = window_create();
-  window_set_background_color(s_window, GColorSunsetOrange);
+  window_set_background_color(s_window, GColorOrange);
   #ifndef PBL_SDK_3
     window_set_fullscreen(s_window, true);
   #endif
@@ -28,7 +27,6 @@ static void initialise_ui(void) {
   s_expected_departure = text_layer_create(GRect(8, 56, 118, 20));
   text_layer_set_background_color(s_expected_departure, GColorClear);
   text_layer_set_text_color(s_expected_departure, GColorWhite);
-  text_layer_set_text(s_expected_departure, "17:39");
   text_layer_set_font(s_expected_departure, s_res_gothic_18_bold);
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_expected_departure);
 
@@ -36,21 +34,18 @@ static void initialise_ui(void) {
   s_last_station = text_layer_create(GRect(8, 126, 108, 40));
   text_layer_set_background_color(s_last_station, GColorClear);
   text_layer_set_text_color(s_last_station, GColorWhite);
-  text_layer_set_text(s_last_station, "PORTOGRUARO / CAORLE");
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_last_station);
 
   // s_last_station_label
   s_last_station_label = text_layer_create(GRect(8, 106, 78, 20));
   text_layer_set_background_color(s_last_station_label, GColorClear);
   text_layer_set_text_color(s_last_station_label, GColorWhite);
-  text_layer_set_text(s_last_station_label, "last seen at:");
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_last_station_label);
 
   // s_status
   s_status = text_layer_create(GRect(8, 86, 78, 20));
   text_layer_set_background_color(s_status, GColorClear);
   text_layer_set_text_color(s_status, GColorWhite);
-  text_layer_set_text(s_status, "IN ORARIO");
   text_layer_set_font(s_status, s_res_gothic_18_bold);
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_status);
 
@@ -84,12 +79,6 @@ static void initialise_ui(void) {
   text_layer_set_text_color(s_station, GColorWhite);
   text_layer_set_text(s_station, "MEOLO");
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_station);
-
-  // s_actionbarlayer
-  s_actionbarlayer = action_bar_layer_create();
-  action_bar_layer_add_to_window(s_actionbarlayer, s_window);
-  action_bar_layer_set_background_color(s_actionbarlayer, GColorBlack);
-  layer_add_child(window_get_root_layer(s_window), (Layer *)s_actionbarlayer);
 }
 
 static void destroy_ui(void) {
@@ -103,7 +92,6 @@ static void destroy_ui(void) {
   text_layer_destroy(s_destination);
   text_layer_destroy(s_destination_label);
   text_layer_destroy(s_station);
-  action_bar_layer_destroy(s_actionbarlayer);
 }
 // END AUTO-GENERATED UI CODE
 
@@ -125,7 +113,43 @@ static void main_window_load_schedule(Window *window,Schedule *schedule) {
   }
 }
 
+static void up_handler(ClickRecognizerRef clickRecognizer,void *context) {
+ 
+  Window *w = context;
+  AppData *app_data = window_get_user_data(w);
+  app_select_prev_schedule(app_data);
+  main_window_load_schedule(w, app_get_current_schedule(app_data));
+  // TODO: inviare comando di aggiornamento dei dati
+}
+
+static void down_handler(ClickRecognizerRef clickRecognizer,void *context) {
+  
+  Window *w = context;
+  AppData *app_data = window_get_user_data(w);
+  app_select_next_schedule(app_data);
+  main_window_load_schedule(w, app_get_current_schedule(app_data));
+  // TODO: inviare comando di aggiornamento dei dati
+}
+
+static void select_handler(ClickRecognizerRef clickRecognizer,void *context) {
+  
+  // TODO: inviare comando di aggiornamento dei dati
+}
+
+static void click_config_provider(void *context) {
+
+  window_single_click_subscribe(BUTTON_ID_UP, up_handler);
+  window_single_click_subscribe(BUTTON_ID_DOWN,down_handler);
+  window_single_click_subscribe(BUTTON_ID_SELECT, select_handler);
+}
+
 static void handle_window_load(Window *window) {
+
+  AppData *app_data = window_get_user_data(window);
+  Schedule *schedule = app_get_current_schedule(app_data);
+  main_window_load_schedule(s_window,schedule);
+  
+  window_set_click_config_provider(window,click_config_provider);
 }
 
 static void handle_window_unload(Window* window) {
@@ -138,12 +162,9 @@ void show_main_window(void) {
   AppData *app_data = app_get_shared();
   if(!app_data) APP_LOG(APP_LOG_LEVEL_ERROR,"NULL app data");
 
-  app_set_index(app_data,0);
-  Schedule *schedule = app_get_current_schedule(app_data);
-  if(!schedule) APP_LOG(APP_LOG_LEVEL_ERROR,"NULL current schedule");
-
-//  schedule_dump(schedule);
-  main_window_load_schedule(s_window,schedule);
+  app_select_first_schedule(app_data);
+  
+  window_set_user_data(s_window, app_data);
 
   window_set_window_handlers(s_window, (WindowHandlers) {
     .load = handle_window_load,
