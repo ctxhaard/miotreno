@@ -18,7 +18,7 @@ static ActionBarLayer *s_actionbarlayer;
 
 static void initialise_ui(void) {
   s_window = window_create();
-  window_set_background_color(s_window, GColorBlack);
+  window_set_background_color(s_window, GColorSunsetOrange);
   #ifndef PBL_SDK_3
     window_set_fullscreen(s_window, true);
   #endif
@@ -108,8 +108,8 @@ static void destroy_ui(void) {
 // END AUTO-GENERATED UI CODE
 
 static void main_window_load_schedule(Window *window,Schedule *schedule) {
-  if(schedule) {
 
+  if(schedule) {
     text_layer_set_text(s_station,schedule_get_station(schedule));
     text_layer_set_text(s_destination,schedule_get_destination(schedule));
     text_layer_set_text(s_status,schedule_get_status(schedule));
@@ -117,7 +117,6 @@ static void main_window_load_schedule(Window *window,Schedule *schedule) {
     text_layer_set_text(s_last_station,schedule_get_last_station(schedule));
   }
   else {
-
     text_layer_set_text(s_station,"station");
     text_layer_set_text(s_destination,"destination");
     text_layer_set_text(s_status,"status");
@@ -143,7 +142,7 @@ void show_main_window(void) {
   Schedule *schedule = app_get_current_schedule(app_data);
   if(!schedule) APP_LOG(APP_LOG_LEVEL_ERROR,"NULL current schedule");
 
-  schedule_dump(schedule);
+//  schedule_dump(schedule);
   main_window_load_schedule(s_window,schedule);
 
   window_set_window_handlers(s_window, (WindowHandlers) {

@@ -7,7 +7,7 @@ Schedule *schedule_create();
 
 void schedule_release(Schedule *);
 
-Schedule *schedule_init(Schedule *,char *station,char *destination,char *exp_dep);
+Schedule *schedule_init(Schedule *s,char *train_id,char *station,char *dest,char *exp_dep);
 
 char *schedule_get_station(Schedule *);
 

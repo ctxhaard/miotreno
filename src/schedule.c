@@ -2,6 +2,7 @@
 
 Schedule *schedule_create() {
   Schedule *result = malloc(sizeof(Schedule));
+  result->id = 0xCACA;
   return result;
 }
 
@@ -16,30 +17,35 @@ void schedule_release(Schedule *s) {
     }
 }
 
-void set_str(char **pDest,char *src) {
-  APP_LOG(APP_LOG_LEVEL_DEBUG,"copying string: %s ...",src);
+void set_str(char **ppDest,char *src) {
+
   // NOTE: se il primo parametro di realloc e'NULL
   // corrisponse ad una malloc
   const size_t len = strlen(src) + 1;
-  *pDest = realloc(*pDest,len);
-
-  char *dest = *pDest;
-  strcpy(dest,src);
-  dest[len - 1] = 0x00;
-  APP_LOG(APP_LOG_LEVEL_DEBUG,"... dest is: %s",*pDest);
+  char *pDest = *ppDest;
+  pDest = realloc(pDest,len);
+  strcpy(pDest,src);
+  pDest[len - 1] = '\0';
+  *ppDest = pDest;
  }
 
-Schedule *schedule_init(Schedule *s,char *station,char *dest,char *exp_dep) {
+Schedule *schedule_init(Schedule *s,char *train_id,char *station,char *dest,char *exp_dep) {
   APP_LOG(APP_LOG_LEVEL_DEBUG,"%s",__PRETTY_FUNCTION__);
-  memset(s,0,sizeof(Schedule));
-  if(station) set_str(&(s->station),station);
-  if(dest) set_str(&(s->destination),dest);
-  if(exp_dep) set_str(&(s->expected_departure),exp_dep);
+  if(train_id && station && dest && exp_dep) {
+    memset(s,0,sizeof(Schedule));
+    s->id = 0xCACA;
+    set_str(&s->train_id,train_id);
+    set_str(&s->station,station);
+    set_str(&s->destination,dest);
+    set_str(&s->expected_departure,exp_dep);
+  }
   return s;
 }
 
 char *schedule_get_station(Schedule *s) {
-  return s->station;
+  char *result = s->station;
+  APP_LOG(APP_LOG_LEVEL_DEBUG,"get_station: %s",result);
+  return result;
 }
 
 char *schedule_get_destination(Schedule *s) {
@@ -59,7 +65,6 @@ Schedule *schedule_set_status(Schedule *this,char *status) {
   return this;
  }
 
-
 char *schedule_get_last_station(Schedule *s) {
   return s->last_station;
 }
@@ -70,8 +75,15 @@ Schedule *schedule_set_last_station(Schedule *this,char *last_station) {
 }
 
 void schedule_dump(Schedule *s) {
-  APP_LOG(APP_LOG_LEVEL_DEBUG,"Schedule (0x%0x):\n\tstation: %s\n\tdestination: %s\n\tdestinationexp dep:%s",
+  APP_LOG(APP_LOG_LEVEL_DEBUG,"Schedule (0x%0x):\n"
+          "\tid:0x%X\n"
+          "\ttrain id: %s\n"
+          "\tstation: %s\n"
+          "\tdestination: %s\n"
+          "\texp dep:%s",
     (int)s,
+    (uint)s->id,
+    s->train_id,
     s->station,
     s->destination,
     s->expected_departure);
