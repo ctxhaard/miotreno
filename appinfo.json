@@ -1,6 +1,8 @@
 {
     "appKeys": {
+        "KEY_COD_LAST_STATION": 5,
         "KEY_COD_PARTENZA": 1,
+        "KEY_COD_STATUS": 4,
         "KEY_COD_STAZIONE": 3,
         "KEY_COD_TRENO": 2
     },

@@ -27,6 +27,20 @@ Pebble.addEventListener('ready',function(){
   pinNextTrain(_trains);
 });
 
+/*
+var emit = function() {
+  count += 1;
+
+  var dict = {"KEY_COUNT": count};
+
+  Pebble.sendAppMessage(dict);
+};
+*/
+
+Pebble.addEventListener('appmessage', function(e) {
+  console.log('AppMessage received!');
+});
+
 function pinNextTrain(trains){
   var train = trains.pop();
   if(train){
