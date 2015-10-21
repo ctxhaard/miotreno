@@ -21,8 +21,13 @@ var _TRAINS = [{
 var _trains;
 
 Pebble.addEventListener('ready',function(){
-  return; // TODO: remove
   console.log('ready!');
+
+  Pebble.addEventListener('appmessage', function(e) {
+    console.log('AppMessage received!');
+  });
+  return; // TODO: remove
+
   _trains = _TRAINS.slice();
   pinNextTrain(_trains);
 });
@@ -37,14 +42,10 @@ var emit = function() {
 };
 */
 
-Pebble.addEventListener('appmessage', function(e) {
-  console.log('AppMessage received!');
-});
-
 function pinNextTrain(trains){
   var train = trains.pop();
   if(train){
-    getTrainStatus(train.codPartenza,train.codTreno,train.codStazione);  
+    getTrainStatus(train.codPartenza,train.codTreno,train.codStazione);
 }
 }
 
@@ -78,7 +79,7 @@ function getTrainStatus(codPartenza,numeroTreno,codStazione){
       title = title + " (" + fermata.ritardoPartenza + "' rit.)";
 
       var partenzaReale = new Date(fermata.partenzaReale);
-      subtitle = " previsto: " + partenzaReale.myToString();      
+      subtitle = " previsto: " + partenzaReale.myToString();
   }
   var pin = {
       "id": fermata.stazione + "-" + partenzaPrevista.toISOString(),
@@ -117,7 +118,7 @@ if(!_timelineToken){
         pinNextTrain(_trains);
     },function(error){
         console.log('error: ' + error + 'getting timeline token');
-    });    
+    });
 }
 else{
   pushTimelinePin(pin,_timelineToken);

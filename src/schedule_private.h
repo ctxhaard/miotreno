@@ -1,11 +1,21 @@
 #pragma once
 
-#include <pebble.h>
 #include "schedule.h"
 
+/**
+* Identify a train and a station on its route
+*/
+struct ScheduleID {
+  /// The start station code (as coded by Viaggiatreno API)
+  char *cod_partenza;
+  /// The train code (as coded by Viaggiatreno API)
+  char *cod_treno;
+  /// The station code (as coded by Viaggiatreno API)
+  char *cod_stazione;
+};
+
 struct Schedule {
-  uint32_t id;
-  char *train_id;
+  struct ScheduleID id;
   char *expected_departure;
   char *last_station;
   char *status;
