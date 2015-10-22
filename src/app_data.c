@@ -135,7 +135,18 @@ Schedule *app_get_current_schedule(AppData *this) {
 
 void app_load_test_schedules(AppData *this) {
 
-  this->schedules[0] = schedule_init(schedule_create(),"fake","fake","fake","Meolo","Venezia S.L.","17:39");
-  this->schedules[1] = schedule_init(schedule_create(),"fake","fake","fake","Quarto D'Altino","Venezia S.L.","17:55");
-  this->schedules[2] = schedule_init(schedule_create(),"fake","fake","fake","Quarto D'Altino","Venezia S.L.","18:17");
+  this->schedules[0] = schedule_init(schedule_create(),"fake","fake","fake",
+  "Meolo","Venezia S.L.","17:39");
+
+  this->schedules[1] = schedule_init(schedule_create(),
+  "S03317", // trieste
+  "2216", // 17:55
+  "S02670", // quarto dáltino
+  "Quarto D'Altino","Venezia S.L.","17:55");
+
+  this->schedules[2] = schedule_init(schedule_create(),
+  "S03200", // portogrouaro
+  "10046", // 18:17
+  "S02670", // Quarto d'altino
+  "Quarto D'Altino","Venezia S.L.","18:17");
 }
