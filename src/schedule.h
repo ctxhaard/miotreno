@@ -29,7 +29,7 @@ char *schedule_get_destination(Schedule *);
 char *schedule_get_expected_departure(Schedule *);
 
 char *schedule_get_status(Schedule *);
-Schedule *schedule_set_status(Schedule *,char *);
+Schedule *schedule_set_status(Schedule *,const char *);
 
 char *schedule_get_last_station(Schedule *);
 Schedule *schedule_set_last_station(Schedule *,char *);

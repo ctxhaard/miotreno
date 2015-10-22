@@ -22,13 +22,25 @@ void app_data_release(AppData *app_data) {
 
 AppData *app_data_init(AppData *this) {
 
-    this->schedule_index = SCHEDULE_INDEX_UNDEF;
-    return this;
+  memset(this,0,sizeof(AppData));
+  this->schedule_index = SCHEDULE_INDEX_UNDEF;
+  return this;
 }
 
 static void sync_changed_handler(const uint32_t key, const Tuple *new_tuple, const Tuple *old_tuple, void *context) {
 
   APP_LOG(APP_LOG_LEVEL_DEBUG,"%s",__PRETTY_FUNCTION__);
+  // TODO: aggiungere alla Schule corrente l'informazione
+  // e notificare la GUI che il dato e' cambiato
+  if(KEY_COD_STATUS == key) {
+    APP_LOG(APP_LOG_LEVEL_DEBUG,"KEY_COD_STATUS changed: %s",new_tuple->value->cstring);
+    AppData *app_data = context;
+    Schedule *s = app_get_current_schedule(app_data);
+    schedule_set_status(s,new_tuple->value->cstring);
+    if(app_data->callbacks.schedule_changed) {
+      app_data->callbacks.schedule_changed(s);    
+    }
+  }
 }
 
 static void sync_error_handler(DictionaryResult dict_error, AppMessageResult app_message_error, void *context) {
@@ -81,6 +93,10 @@ void app_shared_release() {
 //       APP_LOG(APP_LOG_LEVEL_ERROR,"AppData: setting invalid schedule index");
 //     }
 // }
+
+void app_set_callbacks(AppData *this,AppDataCallbacks callbacks) {
+  this->callbacks = callbacks;
+}
 
 Schedule *app_select_first_schedule(AppData *this) {
 
@@ -137,16 +153,19 @@ void app_load_test_schedules(AppData *this) {
 
   this->schedules[0] = schedule_init(schedule_create(),"fake","fake","fake",
   "Meolo","Venezia S.L.","17:39");
+  schedule_set_status(this->schedules[0],"status: undefined");
 
   this->schedules[1] = schedule_init(schedule_create(),
   "S03317", // trieste
   "2216", // 17:55
-  "S02670", // quarto dáltino
+  "S02670", // quarto d'altino
   "Quarto D'Altino","Venezia S.L.","17:55");
+  schedule_set_status(this->schedules[1],"status: undefined");
 
   this->schedules[2] = schedule_init(schedule_create(),
   "S03200", // portogrouaro
   "10046", // 18:17
   "S02670", // Quarto d'altino
   "Quarto D'Altino","Venezia S.L.","18:17");
+  schedule_set_status(this->schedules[2],"status: undefined");
 }

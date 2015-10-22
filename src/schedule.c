@@ -20,7 +20,7 @@ void schedule_release(Schedule *s) {
     }
 }
 
-void set_str(char **ppDest,char *src) {
+void set_str(char **ppDest,const char *src) {
 
   // NOTE: se il primo parametro di realloc e'NULL
   // corrisponse ad una malloc
@@ -76,7 +76,8 @@ char *schedule_get_status(Schedule *s) {
   return s->status;
 }
 
-Schedule *schedule_set_status(Schedule *this,char *status) {
+Schedule *schedule_set_status(Schedule *this,const char *status) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG,"setting schedule status: %s",status);
   set_str(&this->status,status);
   return this;
  }
@@ -104,11 +105,15 @@ void schedule_dump(Schedule *s) {
   APP_LOG(APP_LOG_LEVEL_DEBUG,"Schedule (0x%0x):\n"
           "\ttrain id: %s\n"
           "\tstation: %s\n"
-          "\tdestination: %s\n"
-          "\texp dep:%s",
-    (int)s,
-    s->id.cod_treno,
-    s->station,
-    s->destination,
-    s->expected_departure);
+          "\tdestination: %s\n",
+          (int)s,
+          s->id.cod_treno,
+          s->station,
+          s->destination);
+    APP_LOG(APP_LOG_LEVEL_DEBUG,
+          "\texp dep:%s\n"
+          "\tstatus:%s",
+          s->expected_departure,
+          s->status);
+
 }

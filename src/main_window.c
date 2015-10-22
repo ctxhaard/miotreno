@@ -143,9 +143,19 @@ static void click_config_provider(void *context) {
   window_single_click_subscribe(BUTTON_ID_SELECT, select_handler);
 }
 
+static void schedule_changed(Schedule *s) {
+  schedule_dump(s);
+  APP_LOG(APP_LOG_LEVEL_DEBUG,"%s",__PRETTY_FUNCTION__);
+  main_window_load_schedule(s_window,s);
+  layer_mark_dirty(window_get_root_layer(s_window));
+}
+
 static void handle_window_load(Window *window) {
 
   AppData *app_data = window_get_user_data(window);
+  app_set_callbacks(app_data,(AppDataCallbacks){
+    .schedule_changed= schedule_changed
+  });
   Schedule *schedule = app_get_current_schedule(app_data);
   main_window_load_schedule(s_window,schedule);
   
