@@ -30,7 +30,14 @@ function getTrainStatus(trainID,callback){
     console.log('...viaggiatreno data acquired');
     console.log(this.responseText);
     var trainStatus = JSON.parse(this.responseText);
-    var result = { KEY_COD_STATUS: trainStatus.compRitardo[0] };
+    var result = { KEY_COD_STATUS: trainStatus.compRitardo[0], KEY_COD_LAST_STATION: "--" };
+    for(var idx = 0; idx < trainStatus.fermate.length; ++idx) {
+      var fermata = trainStatus.fermate[idx];
+      if(fermata.arrivoReale) {
+        result.KEY_COD_LAST_STATION = fermata.stazione;
+        break;
+      }
+    }
     console.log("result: " + JSON.stringify(result));
     callback(result);
   };

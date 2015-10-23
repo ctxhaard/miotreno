@@ -16,72 +16,82 @@ static TextLayer *s_destination;
 static TextLayer *s_destination_label;
 static TextLayer *s_station;
 
+static void ruler_update_proc(Layer *this,GContext *ctx) {
+  
+  graphics_context_set_stroke_color(ctx,GColorBlack);
+  graphics_context_set_stroke_width(ctx,2);
+  graphics_draw_line(ctx,GPoint(0,0),GPoint(130,0));
+}
+
 static void initialise_ui(void) {
   s_window = window_create();
-  window_set_background_color(s_window, GColorLightGray);
+  window_set_background_color(s_window, GColorWhite);
   #ifndef PBL_SDK_3
-    window_set_fullscreen(s_window, true);
+  window_set_fullscreen(s_window, true);
   #endif
   // static GFont s_custom_font_28;  
   s_res_24 = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_KEY_DS_DIGITAL_24));
   s_res_24_bold = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_KEY_DS_DIGITAL_BOLD_24));
+  // s_station
+  s_station = text_layer_create(GRect(8, 8, 138, 25));
+  text_layer_set_background_color(s_station, GColorClear);
+  text_layer_set_text_color(s_station, GColorBlack);
+  text_layer_set_font(s_station, s_res_24);
+  text_layer_set_overflow_mode(s_station,GTextOverflowModeWordWrap);
+  text_layer_set_text(s_station,"--");
+  layer_add_child(window_get_root_layer(s_window), (Layer *)s_station);
+  // s_destination_label
+  s_destination_label = text_layer_create(GRect(8, 33, 20, 25));
+  text_layer_set_background_color(s_destination_label, GColorClear);
+  text_layer_set_text_color(s_destination_label, GColorBlack);
+  text_layer_set_font(s_destination_label, s_res_24);
+  text_layer_set_text(s_destination_label,"a:");
+  layer_add_child(window_get_root_layer(s_window), (Layer *)s_destination_label);
+  // s_destination
+  s_destination = text_layer_create(GRect(30, 33, 98, 25));
+  text_layer_set_background_color(s_destination, GColorClear);
+  text_layer_set_text_color(s_destination, GColorBlack);
+  text_layer_set_font(s_destination, s_res_24);
+  text_layer_set_overflow_mode(s_destination,GTextOverflowModeWordWrap);
+  text_layer_set_text(s_destination,"--");
+  layer_add_child(window_get_root_layer(s_window), (Layer *)s_destination);
   // s_expected_departure
-  s_expected_departure = text_layer_create(GRect(8, 76, 138, 30));
+  s_expected_departure = text_layer_create(GRect(8, 58, 138, 25));
   text_layer_set_background_color(s_expected_departure, GColorClear);
   text_layer_set_text_color(s_expected_departure, GColorBlack);
   text_layer_set_font(s_expected_departure, s_res_24);
+  text_layer_set_text(s_expected_departure,"--:--");
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_expected_departure);
-
-  // s_last_station
-  s_last_station = text_layer_create(GRect(8, 126, 108, 40));
-  text_layer_set_background_color(s_last_station, GColorClear);
-  text_layer_set_text_color(s_last_station, GColorBlack);
-  layer_add_child(window_get_root_layer(s_window), (Layer *)s_last_station);
-
-  // s_last_station_label
-  s_last_station_label = text_layer_create(GRect(8, 106, 78, 20));
-  text_layer_set_background_color(s_last_station_label, GColorClear);
-  text_layer_set_text_color(s_last_station_label, GColorBlack);
-  layer_add_child(window_get_root_layer(s_window), (Layer *)s_last_station_label);
-
+  // s_ruler
+  s_ruler = layer_create(GRect(8, 83, 130, 10));
+  layer_set_update_proc(s_ruler,ruler_update_proc);
+  layer_add_child(window_get_root_layer(s_window), (Layer *)s_ruler);
   // s_status
-  s_status = text_layer_create(GRect(8, 106, 138, 30));
+  s_status = text_layer_create(GRect(8, 93, 138, 25));
   text_layer_set_background_color(s_status, GColorClear);
   text_layer_set_text_color(s_status, GColorBlack);
   text_layer_set_font(s_status, s_res_24_bold);
+  text_layer_set_overflow_mode(s_status,GTextOverflowModeWordWrap);
+  text_layer_set_text(s_status,"loading...");
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_status);
-
+  // s_last_station_label
+  s_last_station_label = text_layer_create(GRect(8, 118, 20, 25));
+  text_layer_set_background_color(s_last_station_label, GColorClear);
+  text_layer_set_text_color(s_last_station_label, GColorBlack);
+  text_layer_set_font(s_last_station_label, s_res_24);
+  text_layer_set_text(s_last_station_label,">>");
+  layer_add_child(window_get_root_layer(s_window), (Layer *)s_last_station_label);
+  // s_last_station
+  s_last_station = text_layer_create(GRect(28, 118, 108, 25));
+  text_layer_set_background_color(s_last_station, GColorClear);
+  text_layer_set_text_color(s_last_station, GColorBlack);
+  text_layer_set_overflow_mode(s_last_station,GTextOverflowModeWordWrap);
+  text_layer_set_font(s_last_station, s_res_24);
+  text_layer_set_text(s_last_station,"loading...");
+  layer_add_child(window_get_root_layer(s_window), (Layer *)s_last_station);
   // s_icon_layer
   s_icon_layer = layer_create(GRect(86, 86, 40, 40));
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_icon_layer);
-
-  // s_ruler
-  s_ruler = layer_create(GRect(8, 76, 130, 10));
-  layer_add_child(window_get_root_layer(s_window), (Layer *)s_ruler);
-
-  // s_destination
-  s_destination = text_layer_create(GRect(30, 46, 98, 30));
-  text_layer_set_background_color(s_destination, GColorClear);
-  text_layer_set_text_color(s_destination, GColorBlack);
-  text_layer_set_text(s_destination, "VENEZIA S.L.");
-  text_layer_set_font(s_destination, s_res_24);
-  layer_add_child(window_get_root_layer(s_window), (Layer *)s_destination);
-
-  // s_destination_label
-  s_destination_label = text_layer_create(GRect(8, 46, 20, 30));
-  text_layer_set_background_color(s_destination_label, GColorClear);
-  text_layer_set_text_color(s_destination_label, GColorBlack);
-  text_layer_set_text(s_destination_label, "to:");
-  text_layer_set_font(s_destination_label, s_res_24);
-  layer_add_child(window_get_root_layer(s_window), (Layer *)s_destination_label);
-
-  // s_station
-  s_station = text_layer_create(GRect(8, 16, 138, 30));
-  text_layer_set_background_color(s_station, GColorClear);
-  text_layer_set_text_color(s_station, GColorBlack);
-  text_layer_set_text(s_station, "MEOLO");
-  text_layer_set_font(s_station, s_res_24);
-  layer_add_child(window_get_root_layer(s_window), (Layer *)s_station);
 }
 
 static void destroy_ui(void) {
@@ -138,7 +148,12 @@ static void down_handler(ClickRecognizerRef clickRecognizer,void *context) {
 
 static void select_handler(ClickRecognizerRef clickRecognizer,void *context) {
   
-  // TODO: inviare comando di aggiornamento dei dati
+  Window *w = context;
+  AppData *app_data = window_get_user_data(w);
+  Schedule *s = app_get_current_schedule(app_data);
+  if(s) {
+    app_sync_schedule(app_data,s);    
+  }
 }
 
 static void click_config_provider(void *context) {
@@ -157,14 +172,15 @@ static void schedule_changed(Schedule *s) {
 
 static void handle_window_load(Window *window) {
 
+  window_set_click_config_provider(window,click_config_provider);
   AppData *app_data = window_get_user_data(window);
   app_set_callbacks(app_data,(AppDataCallbacks){
     .schedule_changed= schedule_changed
   });
-  Schedule *schedule = app_get_current_schedule(app_data);
-  main_window_load_schedule(s_window,schedule);
-  
-  window_set_click_config_provider(window,click_config_provider);
+  Schedule *s = app_select_first_schedule(app_data);
+  if(s) {
+    app_sync_schedule(app_data,s);    
+  }
 }
 
 static void handle_window_unload(Window* window) {

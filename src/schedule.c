@@ -86,7 +86,7 @@ char *schedule_get_last_station(Schedule *s) {
   return s->last_station;
 }
 
-Schedule *schedule_set_last_station(Schedule *this,char *last_station) {
+Schedule *schedule_set_last_station(Schedule *this,const char *last_station) {
   set_str(&this->last_station,last_station);
   return this;
 }

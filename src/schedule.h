@@ -32,7 +32,7 @@ char *schedule_get_status(Schedule *);
 Schedule *schedule_set_status(Schedule *,const char *);
 
 char *schedule_get_last_station(Schedule *);
-Schedule *schedule_set_last_station(Schedule *,char *);
+Schedule *schedule_set_last_station(Schedule *,const char *);
 
 void schedule_dump(Schedule *);
 
