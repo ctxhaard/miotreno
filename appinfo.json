@@ -15,6 +15,11 @@
     "resources": {
         "media": [
             {
+                "file": "fonts/DS_DIGITAL_BOLD",
+                "name": "FONT_KEY_DS_DIGITAL_BOLD_24",
+                "type": "font"
+            },
+            {
                 "file": "fonts/DS_DIGITAL",
                 "name": "FONT_KEY_DS_DIGITAL_24",
                 "type": "font"

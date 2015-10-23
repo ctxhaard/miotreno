@@ -4,7 +4,8 @@
 
 // BEGIN AUTO-GENERATED UI CODE; DO NOT MODIFY
 static Window *s_window;
-static GFont s_res_gothic_18_bold;
+static GFont s_res_24;
+static GFont s_res_24_bold;
 static TextLayer *s_expected_departure;
 static TextLayer *s_last_station;
 static TextLayer *s_last_station_label;
@@ -17,36 +18,37 @@ static TextLayer *s_station;
 
 static void initialise_ui(void) {
   s_window = window_create();
-  window_set_background_color(s_window, GColorOrange);
+  window_set_background_color(s_window, GColorLightGray);
   #ifndef PBL_SDK_3
     window_set_fullscreen(s_window, true);
   #endif
   // static GFont s_custom_font_28;  
-  s_res_gothic_18_bold = fonts_load_custom_font(resource_get_handle(FONT_KEY_DS_DIGITAL_24));
+  s_res_24 = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_KEY_DS_DIGITAL_24));
+  s_res_24_bold = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_KEY_DS_DIGITAL_BOLD_24));
   // s_expected_departure
-  s_expected_departure = text_layer_create(GRect(8, 56, 118, 20));
+  s_expected_departure = text_layer_create(GRect(8, 76, 138, 30));
   text_layer_set_background_color(s_expected_departure, GColorClear);
-  text_layer_set_text_color(s_expected_departure, GColorWhite);
-  text_layer_set_font(s_expected_departure, s_res_gothic_18_bold);
+  text_layer_set_text_color(s_expected_departure, GColorBlack);
+  text_layer_set_font(s_expected_departure, s_res_24);
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_expected_departure);
 
   // s_last_station
   s_last_station = text_layer_create(GRect(8, 126, 108, 40));
   text_layer_set_background_color(s_last_station, GColorClear);
-  text_layer_set_text_color(s_last_station, GColorWhite);
+  text_layer_set_text_color(s_last_station, GColorBlack);
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_last_station);
 
   // s_last_station_label
   s_last_station_label = text_layer_create(GRect(8, 106, 78, 20));
   text_layer_set_background_color(s_last_station_label, GColorClear);
-  text_layer_set_text_color(s_last_station_label, GColorWhite);
+  text_layer_set_text_color(s_last_station_label, GColorBlack);
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_last_station_label);
 
   // s_status
-  s_status = text_layer_create(GRect(8, 86, 78, 20));
+  s_status = text_layer_create(GRect(8, 106, 138, 30));
   text_layer_set_background_color(s_status, GColorClear);
-  text_layer_set_text_color(s_status, GColorWhite);
-  text_layer_set_font(s_status, s_res_gothic_18_bold);
+  text_layer_set_text_color(s_status, GColorBlack);
+  text_layer_set_font(s_status, s_res_24_bold);
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_status);
 
   // s_icon_layer
@@ -58,26 +60,27 @@ static void initialise_ui(void) {
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_ruler);
 
   // s_destination
-  s_destination = text_layer_create(GRect(30, 36, 98, 20));
+  s_destination = text_layer_create(GRect(30, 46, 98, 30));
   text_layer_set_background_color(s_destination, GColorClear);
-  text_layer_set_text_color(s_destination, GColorWhite);
+  text_layer_set_text_color(s_destination, GColorBlack);
   text_layer_set_text(s_destination, "VENEZIA S.L.");
-  text_layer_set_font(s_destination, s_res_gothic_18_bold);
+  text_layer_set_font(s_destination, s_res_24);
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_destination);
 
   // s_destination_label
-  s_destination_label = text_layer_create(GRect(8, 36, 20, 20));
+  s_destination_label = text_layer_create(GRect(8, 46, 20, 30));
   text_layer_set_background_color(s_destination_label, GColorClear);
-  text_layer_set_text_color(s_destination_label, GColorWhite);
+  text_layer_set_text_color(s_destination_label, GColorBlack);
   text_layer_set_text(s_destination_label, "to:");
-  text_layer_set_font(s_destination_label, s_res_gothic_18_bold);
+  text_layer_set_font(s_destination_label, s_res_24);
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_destination_label);
 
   // s_station
-  s_station = text_layer_create(GRect(8, 16, 118, 20));
+  s_station = text_layer_create(GRect(8, 16, 138, 30));
   text_layer_set_background_color(s_station, GColorClear);
-  text_layer_set_text_color(s_station, GColorWhite);
+  text_layer_set_text_color(s_station, GColorBlack);
   text_layer_set_text(s_station, "MEOLO");
+  text_layer_set_font(s_station, s_res_24);
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_station);
 }
 
@@ -92,7 +95,8 @@ static void destroy_ui(void) {
   text_layer_destroy(s_destination);
   text_layer_destroy(s_destination_label);
   text_layer_destroy(s_station);
-  fonts_unload_custom_font(s_res_gothic_18_bold);
+  fonts_unload_custom_font(s_res_24);
+  fonts_unload_custom_font(s_res_24_bold);
 }
 // END AUTO-GENERATED UI CODE
 
