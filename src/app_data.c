@@ -114,11 +114,11 @@ Schedule *app_select_first_schedule(AppData *this) {
 
 Schedule *app_select_next_schedule(AppData *this){
 
-  int new_index = (this->schedule_index + 1) % SCHEDULE_NUM_MAX;
+  int new_index = this->schedule_index;
   Schedule *result = NULL;
   do {
+    new_index = (new_index + 1) % SCHEDULE_NUM_MAX;
     result = this->schedules[new_index];
-    ++new_index;
   } while(!result && new_index != 0);
   if(result) {
     this->schedule_index = new_index;
@@ -129,12 +129,13 @@ Schedule *app_select_next_schedule(AppData *this){
 
 Schedule *app_select_prev_schedule(AppData *this){
 
-  int new_index = (this->schedule_index - 1);
-  if(new_index < 0) new_index = (SCHEDULE_NUM_MAX - 1);
+  int new_index = this->schedule_index;
   Schedule *result = NULL;
   do {
+    new_index = (new_index - 1);
+    if(new_index < 0) new_index = (SCHEDULE_NUM_MAX - 1);
+    
     result = this->schedules[new_index];
-    --new_index;
   } while(!result && new_index != 0);
   if(result) {
     this->schedule_index = new_index;
