@@ -21,8 +21,8 @@ static void initialise_ui(void) {
   #ifndef PBL_SDK_3
     window_set_fullscreen(s_window, true);
   #endif
-
-  s_res_gothic_18_bold = fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD);
+  // static GFont s_custom_font_28;  
+  s_res_gothic_18_bold = fonts_load_custom_font(resource_get_handle(FONT_KEY_DS_DIGITAL_24));
   // s_expected_departure
   s_expected_departure = text_layer_create(GRect(8, 56, 118, 20));
   text_layer_set_background_color(s_expected_departure, GColorClear);
@@ -92,6 +92,7 @@ static void destroy_ui(void) {
   text_layer_destroy(s_destination);
   text_layer_destroy(s_destination_label);
   text_layer_destroy(s_station);
+  fonts_unload_custom_font(s_res_gothic_18_bold);
 }
 // END AUTO-GENERATED UI CODE
 

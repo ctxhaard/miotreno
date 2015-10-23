@@ -13,7 +13,13 @@
     "longName": "Mio treno",
     "projectType": "native",
     "resources": {
-        "media": []
+        "media": [
+            {
+                "file": "fonts/DS_DIGITAL",
+                "name": "FONT_KEY_DS_DIGITAL_24",
+                "type": "font"
+            }
+        ]
     },
     "sdkVersion": "3",
     "shortName": "Mio treno",
