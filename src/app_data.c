@@ -114,11 +114,12 @@ Schedule *app_select_first_schedule(AppData *this) {
 
 Schedule *app_select_next_schedule(AppData *this){
 
-  int new_index = this->schedule_index + 1;
-  if(new_index >= SCHEDULE_NUM_MAX) {
-    return NULL;
-  }
-  Schedule *result = this->schedules[new_index];
+  int new_index = (this->schedule_index + 1) % SCHEDULE_NUM_MAX;
+  Schedule *result = NULL;
+  do {
+    result = this->schedules[new_index];
+    ++new_index;
+  } while(!result && new_index != 0);
   if(result) {
     this->schedule_index = new_index;
     schedule_sync_push(result,&(this->sync.sync));
@@ -128,13 +129,15 @@ Schedule *app_select_next_schedule(AppData *this){
 
 Schedule *app_select_prev_schedule(AppData *this){
 
-  int new_index = this->schedule_index - 1;
-  if(new_index < 0) {
-    return NULL;
-  }
-  this->schedule_index = new_index;
-  Schedule *result = this->schedules[new_index];
+  int new_index = (this->schedule_index - 1);
+  if(new_index < 0) new_index = (SCHEDULE_NUM_MAX - 1);
+  Schedule *result = NULL;
+  do {
+    result = this->schedules[new_index];
+    --new_index;
+  } while(!result && new_index != 0);
   if(result) {
+    this->schedule_index = new_index;
     schedule_sync_push(result,&(this->sync.sync));
   }
   return result;
@@ -151,21 +154,25 @@ Schedule *app_get_current_schedule(AppData *this) {
 
 void app_load_test_schedules(AppData *this) {
 
-  this->schedules[0] = schedule_init(schedule_create(),"fake","fake","fake",
+  this->schedules[0] = schedule_init(schedule_create(),"S03200","10046","S02668",
   "Meolo","Venezia S.L.","17:39");
-  schedule_set_status(this->schedules[0],"status: undefined");
 
   this->schedules[1] = schedule_init(schedule_create(),
   "S03317", // trieste
   "2216", // 17:55
   "S02670", // quarto d'altino
   "Quarto D'Altino","Venezia S.L.","17:55");
-  schedule_set_status(this->schedules[1],"status: undefined");
 
   this->schedules[2] = schedule_init(schedule_create(),
   "S03200", // portogrouaro
   "10046", // 18:17
   "S02670", // Quarto d'altino
   "Quarto D'Altino","Venezia S.L.","18:17");
-  schedule_set_status(this->schedules[2],"status: undefined");
+  
+  this->schedules[3] = schedule_init(schedule_create(),
+  "S02593", // Venezia
+  "10011", // 07:11
+  "S03200", // Venezia
+  "Venezia S.L.","Portogruaro","07:11");
+
 }

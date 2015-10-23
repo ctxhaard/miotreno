@@ -30,27 +30,9 @@ function getTrainStatus(trainID,callback){
     console.log('...viaggiatreno data acquired');
     console.log(this.responseText);
     var trainStatus = JSON.parse(this.responseText);
-    var fermata;
-    for(var idx = 0; idx < trainStatus.fermate.length; ++idx){
-        fermata = trainStatus.fermate[idx];
-        if(fermata.id == trainID.KEY_COD_STAZIONE){
-          console.log('station found in response');
-          break;
-        }
-    }
-    var result = null;
-    if(!fermata){
-      console.log('fermata non disponibile');
-    }
-    else{
-      result = {};
-      result.KEY_COD_STATUS = "non ancora partito";
-      if(fermata.partenzaReale){
-        result.KEY_COD_STATUS = "" + fermata.ritardoPartenza;
-      }
-    }
+    var result = { KEY_COD_STATUS: trainStatus.compRitardo[0] };
     console.log("result: " + JSON.stringify(result));
     callback(result);
   };
-  request.send(null);
+  request.send();
 }
