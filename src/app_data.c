@@ -113,6 +113,9 @@ Schedule *app_select_first_schedule(AppData *this) {
   }
   Schedule *result = this->schedules[new_index];
   if(result) {
+    schedule_set_status(result,"loading...");
+    schedule_set_last_station(result,"loading...");     
+
     this->schedule_index = new_index;
     schedule_sync_push(result,&(this->sync.sync));
   }
@@ -128,6 +131,9 @@ Schedule *app_select_next_schedule(AppData *this){
     result = this->schedules[new_index];
   } while(!result && new_index != 0);
   if(result) {
+    schedule_set_status(result,"loading...");
+    schedule_set_last_station(result,"loading...");     
+
     this->schedule_index = new_index;
     persist_write_int(STORAGE_KEY_CURRENT_SCHEDULE_INDEX,new_index);
     schedule_sync_push(result,&(this->sync.sync));
@@ -146,6 +152,9 @@ Schedule *app_select_prev_schedule(AppData *this){
     result = this->schedules[new_index];
   } while(!result && new_index != 0);
   if(result) {
+    schedule_set_status(result,"loading...");
+    schedule_set_last_station(result,"loading...");     
+
     this->schedule_index = new_index;
     persist_write_int(STORAGE_KEY_CURRENT_SCHEDULE_INDEX,new_index);
     schedule_sync_push(result,&(this->sync.sync));
@@ -159,11 +168,11 @@ void app_sync_schedule(AppData *this,Schedule *s) {
 
 Schedule *app_get_current_schedule(AppData *this) {
 
-    Schedule *result = NULL;
-    if(this->schedule_index != SCHEDULE_INDEX_UNDEF) {
-      result = this->schedules[this->schedule_index];
-    }
-    return result;
+  Schedule *result = NULL;
+  if(this->schedule_index != SCHEDULE_INDEX_UNDEF) {
+    result = this->schedules[this->schedule_index];
+  }
+  return result;
 }
 
 void app_load_test_schedules(AppData *this) {

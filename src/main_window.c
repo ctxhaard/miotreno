@@ -20,7 +20,7 @@ static void ruler_update_proc(Layer *this,GContext *ctx) {
   
   graphics_context_set_stroke_color(ctx,GColorBlack);
   graphics_context_set_stroke_width(ctx,2);
-  graphics_draw_line(ctx,GPoint(0,0),GPoint(130,0));
+  graphics_draw_line(ctx,GPoint(0,5),GPoint(100,5));
 }
 
 static void initialise_ui(void) {
@@ -82,7 +82,7 @@ static void initialise_ui(void) {
   text_layer_set_text(s_last_station_label,">>");
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_last_station_label);
   // s_last_station
-  s_last_station = text_layer_create(GRect(28, 118, 108, 25));
+  s_last_station = text_layer_create(GRect(28, 118, 108, 50));
   text_layer_set_background_color(s_last_station, GColorClear);
   text_layer_set_text_color(s_last_station, GColorBlack);
   text_layer_set_overflow_mode(s_last_station,GTextOverflowModeWordWrap);
@@ -177,10 +177,7 @@ static void handle_window_load(Window *window) {
   app_set_callbacks(app_data,(AppDataCallbacks){
     .schedule_changed= schedule_changed
   });
-  Schedule *s = app_select_first_schedule(app_data);
-  if(s) {
-    app_sync_schedule(app_data,s);    
-  }
+  app_select_first_schedule(app_data);
 }
 
 static void handle_window_unload(Window* window) {
