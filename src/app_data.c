@@ -35,12 +35,14 @@ static void sync_changed_handler(const uint32_t key, const Tuple *new_tuple, con
   Schedule *s = app_get_current_schedule(app_data);
   bool changed = false;
 
-  if(KEY_COD_STATUS == key) {
+  // NOTE: changed handler is called in case of Tuplet reorganization; check actual values
+  // changing is needed
+  if(KEY_COD_STATUS == key && old_tuple && 0 != strcmp(new_tuple->value->cstring,old_tuple->value->cstring)) {
     APP_LOG(APP_LOG_LEVEL_DEBUG,"KEY_COD_STATUS changed: %s",new_tuple->value->cstring);
     schedule_set_status(s,new_tuple->value->cstring);
     changed = true;
   }
-  else if(KEY_COD_LAST_STATION == key) {
+  else if(KEY_COD_LAST_STATION == key && old_tuple && 0 != strcmp(new_tuple->value->cstring,old_tuple->value->cstring)) {
     APP_LOG(APP_LOG_LEVEL_DEBUG,"KEY_COD_LAST_STATION changed: %s",new_tuple->value->cstring);
     schedule_set_last_station(s,new_tuple->value->cstring); 
     changed = true;
@@ -113,10 +115,11 @@ Schedule *app_select_first_schedule(AppData *this) {
   }
   Schedule *result = this->schedules[new_index];
   if(result) {
+    this->schedule_index = new_index;
+    
     schedule_set_status(result,"loading...");
     schedule_set_last_station(result,"loading...");     
 
-    this->schedule_index = new_index;
     schedule_sync_push(result,&(this->sync.sync));
   }
   return result;
@@ -131,11 +134,12 @@ Schedule *app_select_next_schedule(AppData *this){
     result = this->schedules[new_index];
   } while(!result && new_index != 0);
   if(result) {
+    this->schedule_index = new_index;
+    persist_write_int(STORAGE_KEY_CURRENT_SCHEDULE_INDEX,new_index);
+    
     schedule_set_status(result,"loading...");
     schedule_set_last_station(result,"loading...");     
 
-    this->schedule_index = new_index;
-    persist_write_int(STORAGE_KEY_CURRENT_SCHEDULE_INDEX,new_index);
     schedule_sync_push(result,&(this->sync.sync));
   }
   return result;
@@ -152,11 +156,12 @@ Schedule *app_select_prev_schedule(AppData *this){
     result = this->schedules[new_index];
   } while(!result && new_index != 0);
   if(result) {
+    this->schedule_index = new_index;
+    persist_write_int(STORAGE_KEY_CURRENT_SCHEDULE_INDEX,new_index);
+    
     schedule_set_status(result,"loading...");
     schedule_set_last_station(result,"loading...");     
 
-    this->schedule_index = new_index;
-    persist_write_int(STORAGE_KEY_CURRENT_SCHEDULE_INDEX,new_index);
     schedule_sync_push(result,&(this->sync.sync));
   }
   return result;

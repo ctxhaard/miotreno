@@ -33,7 +33,7 @@ static void initialise_ui(void) {
   s_res_24 = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_KEY_DS_DIGITAL_24));
   s_res_24_bold = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_KEY_DS_DIGITAL_BOLD_24));
   // s_station
-  s_station = text_layer_create(GRect(8, 8, 138, 25));
+  s_station = text_layer_create(GRect(8, 4, 138, 25));
   text_layer_set_background_color(s_station, GColorClear);
   text_layer_set_text_color(s_station, GColorBlack);
   text_layer_set_font(s_station, s_res_24);
@@ -41,14 +41,14 @@ static void initialise_ui(void) {
   text_layer_set_text(s_station,"--");
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_station);
   // s_destination_label
-  s_destination_label = text_layer_create(GRect(8, 33, 20, 25));
+  s_destination_label = text_layer_create(GRect(8, 29, 20, 25));
   text_layer_set_background_color(s_destination_label, GColorClear);
   text_layer_set_text_color(s_destination_label, GColorBlack);
   text_layer_set_font(s_destination_label, s_res_24);
   text_layer_set_text(s_destination_label,"a:");
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_destination_label);
   // s_destination
-  s_destination = text_layer_create(GRect(30, 33, 98, 25));
+  s_destination = text_layer_create(GRect(30, 29, 98, 25));
   text_layer_set_background_color(s_destination, GColorClear);
   text_layer_set_text_color(s_destination, GColorBlack);
   text_layer_set_font(s_destination, s_res_24);
@@ -56,18 +56,18 @@ static void initialise_ui(void) {
   text_layer_set_text(s_destination,"--");
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_destination);
   // s_expected_departure
-  s_expected_departure = text_layer_create(GRect(8, 58, 138, 25));
+  s_expected_departure = text_layer_create(GRect(8, 54, 138, 25));
   text_layer_set_background_color(s_expected_departure, GColorClear);
   text_layer_set_text_color(s_expected_departure, GColorBlack);
   text_layer_set_font(s_expected_departure, s_res_24);
   text_layer_set_text(s_expected_departure,"--:--");
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_expected_departure);
   // s_ruler
-  s_ruler = layer_create(GRect(8, 83, 130, 10));
+  s_ruler = layer_create(GRect(8, 79, 130, 10));
   layer_set_update_proc(s_ruler,ruler_update_proc);
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_ruler);
   // s_status
-  s_status = text_layer_create(GRect(8, 93, 138, 25));
+  s_status = text_layer_create(GRect(8, 89, 138, 25));
   text_layer_set_background_color(s_status, GColorClear);
   text_layer_set_text_color(s_status, GColorBlack);
   text_layer_set_font(s_status, s_res_24_bold);
@@ -75,14 +75,14 @@ static void initialise_ui(void) {
   text_layer_set_text(s_status,"loading...");
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_status);
   // s_last_station_label
-  s_last_station_label = text_layer_create(GRect(8, 118, 20, 25));
+  s_last_station_label = text_layer_create(GRect(8, 114, 20, 25));
   text_layer_set_background_color(s_last_station_label, GColorClear);
   text_layer_set_text_color(s_last_station_label, GColorBlack);
   text_layer_set_font(s_last_station_label, s_res_24);
   text_layer_set_text(s_last_station_label,">>");
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_last_station_label);
   // s_last_station
-  s_last_station = text_layer_create(GRect(28, 118, 108, 50));
+  s_last_station = text_layer_create(GRect(28, 114, 108, 50));
   text_layer_set_background_color(s_last_station, GColorClear);
   text_layer_set_text_color(s_last_station, GColorBlack);
   text_layer_set_overflow_mode(s_last_station,GTextOverflowModeWordWrap);
