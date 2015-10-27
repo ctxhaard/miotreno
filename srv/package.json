@@ -1,7 +1,7 @@
 {
-  "name": "miotreno",
+  "name": "miotreno_config",
   "version": "0.0.1",
-  "description": "A module to add Pebble Watch timeline pins using italian trains status APIs by 'viaggiatreno'",
+  "description": "Configuration page for miotreno Pebble WatchApp",
   "author": "Carlo Tomasin <c.tomasin@gmail.com>",
   "scripts": {
     "start": "node main.js" 
@@ -14,10 +14,10 @@
   "keywords": [
     "viaggiatreno",
     "trenitalia",
-    "stato"
+    "stato",
+    "miotreno"
   ],
   "dependencies": {
-    "xmlhttprequest": "~1.7.0",
     "express": "4.13.3"
   },
   "preferGlobal": false,
