@@ -4,6 +4,7 @@
 static AppData *g_app_data = NULL;
 
 #define STORAGE_KEY_CURRENT_SCHEDULE_INDEX 1
+#define UPDATE_TIMER_MS (5 * 60 * 1000)
 
 AppData *app_data_create() {
 
@@ -26,35 +27,8 @@ AppData *app_data_init(AppData *this) {
 
   memset(this,0,sizeof(AppData));
   this->schedule_index = SCHEDULE_INDEX_UNDEF;
+  this->callbacks.timer_tick = update_timer_tick;
   return this;
-}
-
-static void sync_changed_handler(const uint32_t key, const Tuple *new_tuple, const Tuple *old_tuple, void *context) {
-  
-  AppData *app_data = context;
-  Schedule *s = app_get_current_schedule(app_data);
-  bool changed = false;
-
-  // NOTE: changed handler is called in case of Tuplet reorganization; check actual values
-  // changing is needed
-  if(KEY_COD_STATUS == key && old_tuple && 0 != strcmp(new_tuple->value->cstring,old_tuple->value->cstring)) {
-    APP_LOG(APP_LOG_LEVEL_DEBUG,"KEY_COD_STATUS changed: %s",new_tuple->value->cstring);
-    schedule_set_status(s,new_tuple->value->cstring);
-    changed = true;
-  }
-  else if(KEY_COD_LAST_STATION == key && old_tuple && 0 != strcmp(new_tuple->value->cstring,old_tuple->value->cstring)) {
-    APP_LOG(APP_LOG_LEVEL_DEBUG,"KEY_COD_LAST_STATION changed: %s",new_tuple->value->cstring);
-    schedule_set_last_station(s,new_tuple->value->cstring); 
-    changed = true;
-  }
-  if(changed && app_data->callbacks.schedule_changed) {
-    app_data->callbacks.schedule_changed(s);    
-  }
-}
-
-static void sync_error_handler(DictionaryResult dict_error, AppMessageResult app_message_error, void *context) {
-
-  APP_LOG(APP_LOG_LEVEL_DEBUG,"%s",__PRETTY_FUNCTION__);
 }
 
 AppData *app_get_shared() {
@@ -102,6 +76,10 @@ void app_shared_release() {
 //       APP_LOG(APP_LOG_LEVEL_ERROR,"AppData: setting invalid schedule index");
 //     }
 // }
+
+AppDataCallbacks app_get_callbacks(AppData *this) {
+  return this->callbacks;
+}
 
 void app_set_callbacks(AppData *this,AppDataCallbacks callbacks) {
   this->callbacks = callbacks;
@@ -182,25 +160,82 @@ Schedule *app_get_current_schedule(AppData *this) {
 
 void app_load_test_schedules(AppData *this) {
 
-  this->schedules[0] = schedule_init(schedule_create(),"S03200","10046","S02668",
-  "Meolo","Venezia S.L.","17:39");
+  this->schedules[0] = schedule_init(schedule_create(),
+                                     "S03200",
+                                     "10046",
+                                     "S02668",
+                                     "Meolo","Venezia S.L.","17:39");
 
   this->schedules[1] = schedule_init(schedule_create(),
-  "S03317", // trieste
-  "2216", // 17:55
-  "S02670", // quarto d'altino
-  "Quarto D'Altino","Venezia S.L.","17:55");
+                                     "S03317", // trieste
+                                     "2216", // 17:55
+                                     "S02670", // quarto d'altino
+                                     "Quarto D'Altino","Venezia S.L.","17:55");
 
   this->schedules[2] = schedule_init(schedule_create(),
-  "S03200", // portogrouaro
-  "10046", // 18:17
-  "S02670", // Quarto d'altino
-  "Quarto D'Altino","Venezia S.L.","18:17");
-  
+                                     "S03200", // portogrouaro
+                                     "10046", // 18:17
+                                     "S02670", // Quarto d'altino
+                                     "Quarto D'Altino","Venezia S.L.","18:17");
+
   this->schedules[3] = schedule_init(schedule_create(),
-  "S02593", // Venezia
-  "10011", // 07:11
-  "S03200", // Venezia
-  "Venezia S.L.","Portogruaro","07:11");
+                                     "S03200", // portogrouaro
+                                     "10046", // 18:11
+                                     "S02668", // Meolo
+                                     "Meolo","Venezia S.L.","18:11");
+
+  this->schedules[4] = schedule_init(schedule_create(),
+                                     "S02593", // Venezia
+                                     "10011", // 07:11
+                                     "S03200", // Venezia
+                                     "Venezia S.L.","Portogruaro","07:11");
 
 }
+
+void sync_changed_handler(const uint32_t key, const Tuple *new_tuple, const Tuple *old_tuple, void *context) {
+  
+  AppData *app_data = context;
+  Schedule *s = app_get_current_schedule(app_data);
+  bool changed = false;
+
+  // NOTE: changed handler is called in case of Tuplet reorganization; check actual values
+  // changing is needed
+  if(KEY_COD_STATUS == key && old_tuple && 0 != strcmp(new_tuple->value->cstring,old_tuple->value->cstring)) {
+    APP_LOG(APP_LOG_LEVEL_DEBUG,"KEY_COD_STATUS changed: %s",new_tuple->value->cstring);
+    schedule_set_status(s,new_tuple->value->cstring);
+    changed = true;
+  }
+  else if(KEY_COD_LAST_STATION == key && old_tuple && 0 != strcmp(new_tuple->value->cstring,old_tuple->value->cstring)) {
+    APP_LOG(APP_LOG_LEVEL_DEBUG,"KEY_COD_LAST_STATION changed: %s",new_tuple->value->cstring);
+    schedule_set_last_station(s,new_tuple->value->cstring); 
+    changed = true;
+  }
+  if(changed && app_data->callbacks.schedule_changed) {
+    app_data->callbacks.schedule_changed(s);    
+  }
+  if(app_data->callbacks.timer_tick) {
+    if(app_data->sync.ldtmr) {
+      app_timer_reschedule(app_data->sync.ldtmr,UPDATE_TIMER_MS);
+    }
+    else {
+      app_timer_register(UPDATE_TIMER_MS,app_data->callbacks.timer_tick,app_data);
+    }
+  }
+}
+
+void sync_error_handler(DictionaryResult dict_error, AppMessageResult app_message_error, void *context) {
+
+  APP_LOG(APP_LOG_LEVEL_DEBUG,"%s",__PRETTY_FUNCTION__);
+}
+
+void update_timer_tick(void *context) {
+  AppData *this = context;
+
+  app_timer_reschedule(this->sync.ldtmr,UPDATE_TIMER_MS);
+  
+  Schedule *s = app_get_current_schedule(this);
+  if(s) {
+    schedule_sync_push(s,&(this->sync.sync));
+  }
+}
+

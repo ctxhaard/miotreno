@@ -174,9 +174,11 @@ static void handle_window_load(Window *window) {
 
   window_set_click_config_provider(window,click_config_provider);
   AppData *app_data = window_get_user_data(window);
-  app_set_callbacks(app_data,(AppDataCallbacks){
-    .schedule_changed= schedule_changed
-  });
+  
+  AppDataCallbacks cb = app_get_callbacks(app_data);
+  cb.schedule_changed = schedule_changed;
+  app_set_callbacks(app_data,cb);
+
   app_select_first_schedule(app_data);
 }
 
