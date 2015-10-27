@@ -1,7 +1,17 @@
-// load a mock Pebble object
-var Pebble = require('./pebble');
-// library to use XMLHttpRequest in node
-var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
-// 'include' of app.js to share codebase with Pebble App
-var fs = require('fs');
-eval(fs.readFileSync('./app.js') + '');
+#!/usr/bin/env node --harmony
+
+"use strict"
+
+
+const express = require('express'),  
+    app = express(),
+    http = require('http').Server(app);
+ 
+
+app.use(express.static('public/images/'));
+app.use(express.static('public/javascripts/'));
+app.use(express.static('views/'));
+
+http.listen(80,function(){
+    console.log('listening on *:80');
+});
