@@ -47,6 +47,7 @@ AppData *app_get_shared() {
           TupletCString(KEY_COD_STAZIONE, ""),
           TupletCString(KEY_COD_STATUS, ""),
           TupletCString(KEY_COD_LAST_STATION, ""),
+          TupletInteger(KEY_JS_READY,0),
         };
 
         app_sync_init(&result->sync.sync,
@@ -200,15 +201,21 @@ void sync_changed_handler(const uint32_t key, const Tuple *new_tuple, const Tupl
 
   // NOTE: changed handler is called in case of Tuplet reorganization; check actual values
   // changing is needed
-  if(KEY_COD_STATUS == key && old_tuple && 0 != strcmp(new_tuple->value->cstring,old_tuple->value->cstring)) {
+  // status could be the same for different trains: skip value comparison
+  if(KEY_COD_STATUS == key /*&& old_tuple && 0 != strcmp(new_tuple->value->cstring,old_tuple->value->cstring)*/) {
     APP_LOG(APP_LOG_LEVEL_DEBUG,"KEY_COD_STATUS changed: %s",new_tuple->value->cstring);
     schedule_set_status(s,new_tuple->value->cstring);
     changed = true;
   }
-  else if(KEY_COD_LAST_STATION == key && old_tuple && 0 != strcmp(new_tuple->value->cstring,old_tuple->value->cstring)) {
+  // last station could be the same for different trains: skip value comparison
+  else if(KEY_COD_LAST_STATION == key /*&& old_tuple && 0 != strcmp(new_tuple->value->cstring,old_tuple->value->cstring)*/) {
     APP_LOG(APP_LOG_LEVEL_DEBUG,"KEY_COD_LAST_STATION changed: %s",new_tuple->value->cstring);
     schedule_set_last_station(s,new_tuple->value->cstring); 
     changed = true;
+  }
+  else if(KEY_JS_READY == key && new_tuple->value->int32 && old_tuple && new_tuple->value->int32 != old_tuple->value->int32) {
+    // javascript is ready to run
+    app_select_first_schedule(app_data);
   }
   if(changed && app_data->callbacks.schedule_changed) {
     app_data->callbacks.schedule_changed(s);    

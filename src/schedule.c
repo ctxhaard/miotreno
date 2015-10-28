@@ -77,7 +77,7 @@ char *schedule_get_status(Schedule *s) {
 }
 
 Schedule *schedule_set_status(Schedule *this,const char *status) {
-  APP_LOG(APP_LOG_LEVEL_DEBUG,"setting schedule status: %s",status);
+//  APP_LOG(APP_LOG_LEVEL_DEBUG,"setting schedule status: %s",status);
   set_str(&this->status,status);
   return this;
  }

@@ -1,22 +1,28 @@
 
 Pebble.addEventListener('ready',function(){
   console.log('ready!');
+  Pebble.sendAppMessage({ KEY_JS_READY: true });
 
   Pebble.addEventListener('appmessage', function(e) {
-    console.log('AppMessage received: ' + e.payload);
-    // TODO: chiamare solo una volta!
+
     var trainID = e.payload;
     getTrainStatus(trainID,function(trainStatus){
       if(trainStatus) {
         console.log('got train status: ' + trainStatus.KEY_COD_STATUS);
-        Pebble.sendAppMessage(trainStatus,null,null);
+        Pebble.sendAppMessage(trainStatus);
       }
       else {
         console.log('error getting train status');
-        Pebble.sendAppMessage({ KEY_COD_STATUS: "error" },null,null);
+        Pebble.sendAppMessage({ KEY_COD_STATUS: "error" });
       }
     });
   });
+});
+
+Pebble.addEventListener("showConfiguration",function(e){
+  
+    console.log('showConfiguration!');
+    Pebble.openURL('https://powerful-plains-8811.herokuapp.com/');
 });
 
 function getTrainStatus(trainID,callback){

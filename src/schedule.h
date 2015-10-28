@@ -7,6 +7,8 @@
 #define KEY_COD_STAZIONE 3
 #define KEY_COD_STATUS   4
 #define KEY_COD_LAST_STATION 5
+#define KEY_JS_READY 6
+
 // ...
 
 struct Schedule;
