@@ -1,22 +1,10 @@
 {
-  "name": "miotreno_config",
-  "version": "0.0.1",
-  "description": "Configuration page for miotreno Pebble WatchApp",
-  "author": "Carlo Tomasin <c.tomasin@gmail.com>",
+  "name": "srv",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ctxhaard/miotreno"
-  },
-  "keywords": [
-    "viaggiatreno",
-    "trenitalia",
-    "stato",
-    "miotreno"
-  ],
   "dependencies": {
     "body-parser": "~1.13.2",
     "cookie-parser": "~1.3.5",
@@ -25,8 +13,5 @@
     "jade": "~1.11.0",
     "morgan": "~1.6.1",
     "serve-favicon": "~2.3.0"
-  },
-  "preferGlobal": false,
-  "private": true,  
-  "license": "MIT"
+  }
 }
