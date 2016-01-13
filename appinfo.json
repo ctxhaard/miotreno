@@ -1,45 +1,47 @@
 {
-    "appKeys": {
-        "KEY_COD_LAST_STATION": 5,
-        "KEY_COD_PARTENZA": 1,
-        "KEY_COD_STATUS": 4,
-        "KEY_COD_STAZIONE": 3,
-        "KEY_COD_TRENO": 2,
-        "KEY_JS_READY": 6
-    },
-    "capabilities": [
-        "configurable"
-    ],
-    "companyName": "Carlo Tomasin",
-    "longName": "Mio treno",
-    "projectType": "native",
-    "resources": {
-        "media": [
-            {
-                "file": "fonts/LECO",
-                "name": "FONT_KEY_LECO_24",
-                "type": "font"
-            },
-            {
-                "file": "fonts/DS_DIGITAL_BOLD",
-                "name": "FONT_KEY_DS_DIGITAL_BOLD_24",
-                "type": "font"
-            },
-            {
-                "file": "fonts/DS_DIGITAL",
-                "name": "FONT_KEY_DS_DIGITAL_24",
-                "type": "font"
-            }
-        ]
-    },
-    "sdkVersion": "3",
-    "shortName": "Mio treno",
-    "targetPlatforms": [
-        "basalt"
-    ],
-    "uuid": "67073df8-7899-45df-86b5-53fa2b66309a",
-    "versionLabel": "0.1",
-    "watchapp": {
-        "watchface": false
-    }
+  "appKeys": {
+    "KEY_COD_LAST_STATION": 5,
+    "KEY_COD_PARTENZA": 1,
+    "KEY_COD_STATUS": 4,
+    "KEY_COD_STAZIONE": 3,
+    "KEY_COD_TRENO": 2,
+    "KEY_JS_READY": 6
+  },
+  "capabilities": [
+    "configurable"
+  ],
+  "companyName": "Carlo Tomasin",
+  "longName": "Mio treno",
+  "projectType": "native",
+  "resources": {
+    "media": [
+      {
+        "file": "fonts/LECO",
+        "name": "FONT_KEY_LECO_24",
+        "type": "font"
+      },
+      {
+        "file": "fonts/DS_DIGITAL_BOLD",
+        "name": "FONT_KEY_DS_DIGITAL_BOLD_24",
+        "type": "font"
+      },
+      {
+        "file": "fonts/DS_DIGITAL",
+        "name": "FONT_KEY_DS_DIGITAL_24",
+        "type": "font"
+      }
+    ]
+  },
+  "sdkVersion": "3",
+  "shortName": "Mio treno",
+  "targetPlatforms": [
+    "aplite",
+    "basalt",
+    "chalk"
+  ],
+  "uuid": "67073df8-7899-45df-86b5-53fa2b66309a",
+  "versionLabel": "0.1",
+  "watchapp": {
+    "watchface": false
+  }
 }
